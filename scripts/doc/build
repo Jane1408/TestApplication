@@ -1,0 +1,12 @@
+#!/bin/sh
+rm -R ./out
+
+export ROOT=../../src/ispring
+export PRESENTER_ROOT=$ROOT/presenter
+export UTILS_ROOT=$ROOT/utils
+
+./build_doc \
+	$PRESENTER_ROOT/player \
+	$UTILS_ROOT/assets \
+	$PRESENTER_ROOT/presentation \
+	$ROOT/events

@@ -1,0 +1,3 @@
+#!/bin/sh
+
+jsdoc -l -r -t templates/default_ispring $@
