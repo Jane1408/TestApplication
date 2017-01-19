@@ -1,5 +1,6 @@
 goog.provide("TestApplication.Controller");
 
+goog.require("TestApplication.view.View");
 goog.require("TestApplication.view.Toolbar");
 goog.require("TestApplication.model.Model");
 goog.require("TestApplication.History");
@@ -20,6 +21,8 @@ goog.scope(function(){
             this._toolbar = new TestApplication.view.Toolbar(this._dispatcher);
             /**@private {TestApplication.History}*/
             this._history = new TestApplication.History();
+            /**@private {TestApplication.view.View}*/
+            this._view = new TestApplication.view.View();
 
             this._dispatcher.addEventListener(TestApplication.EventType.ACTION, goog.bind(function (e) {
                 if (e.detail.id == "undo")

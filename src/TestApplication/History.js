@@ -28,7 +28,6 @@ goog.scope(function()
             goog.array.insert(this._commands, command);
             command.execute();
             ++this._currentCommsnd;
-            console.log("this._current = " + this._currentCommsnd);
         },
 
         /**

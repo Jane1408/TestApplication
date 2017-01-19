@@ -20,7 +20,6 @@ goog.scope(function(){
         },
         _buttonClicked: function()
         {
-            console.log("Button pressed");
             var event = new CustomEvent(TestApplication.EventType.ACTION, {
                 "detail" :{
                     "id" : this._id

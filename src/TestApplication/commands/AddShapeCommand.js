@@ -11,7 +11,6 @@ goog.scope(function()
     TestApplication.commands.AddShapeCommand = goog.defineClass(TestApplication.commands.Command, {
         constructor:function(model, type)
         {
-            console.log("COMMAND");
             this._model = model;
             this._newShape = new TestApplication.model.ShapeModel(type);
         },

@@ -1,6 +1,8 @@
-#button {
+#canvas {
     position: absolute;
-    background: url("../../../src/TestApplication/res/triangle.png") no-repeat;
+    top: 55px;
+    background-color: #fdffdc;
+    border-color: #1d334f;
 
 }
 
