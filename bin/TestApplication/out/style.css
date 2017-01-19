@@ -1,11 +1,11 @@
 #button {
     position: absolute;
-    background: url("../../../src/TestApplication/triangle.png") no-repeat;
+    background: url("../../../src/TestApplication/res/triangle.png") no-repeat;
 
 }
 
 #triangle{
-    background: url("../../../src/TestApplication/triangle.png") no-repeat;
+    background: url("../../../src/TestApplication/res/triangle.png") no-repeat;
     position: absolute;
     width: 55px;
     height: 55px;
@@ -13,7 +13,7 @@
     left:0;
 }
 #circle{
-    background: url("../../../src/TestApplication/circle.png") no-repeat;
+    background: url("../../../src/TestApplication/res/circle.png") no-repeat;
     position: absolute;
     width: 55px;
     height: 55px;
@@ -21,7 +21,7 @@
     left: 55px;
 }
 #square{
-    background: url("../../../src/TestApplication/square.png") no-repeat;
+    background: url("../../../src/TestApplication/res/square.png") no-repeat;
     position: absolute;
     width: 55px;
     height: 55px;
@@ -29,7 +29,7 @@
     left: 110px;
 }
 #undo{
-    background: url("../../../src/TestApplication/undo.png") no-repeat;
+    background: url("../../../src/TestApplication/res/undo.png") no-repeat;
     position: absolute;
     width: 55px;
     height: 55px;
@@ -37,7 +37,7 @@
     right: 55px;
 }
 #redo{
-    background: url("../../../src/TestApplication/redo.png") no-repeat;
+    background: url("../../../src/TestApplication/res/redo.png") no-repeat;
     position: absolute;
     width: 55px;
     height: 55px;
