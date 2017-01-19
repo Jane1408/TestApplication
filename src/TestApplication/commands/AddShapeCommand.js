@@ -1,6 +1,7 @@
 goog.provide("TestApplication.commands.AddShapeCommand");
 
 goog.require("TestApplication.commands.Command");
+goog.require("TestApplication.model.ShapeModel");
 
 goog.scope(function()
 {
@@ -10,6 +11,7 @@ goog.scope(function()
     TestApplication.commands.AddShapeCommand = goog.defineClass(TestApplication.commands.Command, {
         constructor:function(model, type)
         {
+            console.log("COMMAND");
             this._model = model;
             this._newShape = new TestApplication.model.ShapeModel(type);
         },
@@ -25,9 +27,9 @@ goog.scope(function()
         /**
          * @public
          */
-        unExecute:function(){
+        unExecute:function()
+        {
             this._model.removeShape(this._newShape);
-
         }
     })
 });

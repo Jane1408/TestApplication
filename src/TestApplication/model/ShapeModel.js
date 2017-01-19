@@ -9,8 +9,10 @@ goog.scope(function(){
         constructor: function(type)
         {
             this._type = type;
-            this._position = new goog.math.Coordinate(this.POS_X, this.POS_Y);
-            this._size =new goog.math.Size(this.SHAPE_WIDTH, this.SHAPE_HEIGHT);
+            this._position = new goog.math.Coordinate(TestApplication.model.ShapeModel.POS_X,
+                TestApplication.model.ShapeModel.POS_Y);
+            this._size =new goog.math.Size(TestApplication.model.ShapeModel.SHAPE_WIDTH,
+                TestApplication.model.ShapeModel.SHAPE_HEIGHT);
         },
         /**
          * @public

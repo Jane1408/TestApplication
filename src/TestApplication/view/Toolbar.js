@@ -10,7 +10,8 @@ goog.scope(function(){
      * @constructor
      */
     TestApplication.view.Toolbar = goog.defineClass(null, {
-        constructor: function () {
+        constructor: function (dispatcher) {
+            this._dispatcher = dispatcher;
             this._toolbar = goog.dom.createElement(goog.dom.TagName.DIV);
             this._toolbar.id = Constants.TOOLBAR;
             document.body.appendChild(this._toolbar);
@@ -18,11 +19,11 @@ goog.scope(function(){
             this._createButtons();
         },
         _createButtons: function () {
-            this._buttons.push(new TestApplication.view.Button(Constants.CIRCLE));
-            this._buttons.push(new TestApplication.view.Button(Constants.TRIANGLE));
-            this._buttons.push(new TestApplication.view.Button(Constants.SQUARE));
-            this._buttons.push(new TestApplication.view.Button(Constants.UNDO));
-            this._buttons.push(new TestApplication.view.Button(Constants.REDO));
+            this._buttons.push(new TestApplication.view.Button(Constants.CIRCLE, this._dispatcher));
+            this._buttons.push(new TestApplication.view.Button(Constants.TRIANGLE, this._dispatcher));
+            this._buttons.push(new TestApplication.view.Button(Constants.SQUARE, this._dispatcher));
+            this._buttons.push(new TestApplication.view.Button(Constants.UNDO, this._dispatcher));
+            this._buttons.push(new TestApplication.view.Button(Constants.REDO, this._dispatcher));
         },
         
     });
