@@ -5,9 +5,10 @@ goog.require("TestApplication.view.Toolbar");
 goog.require("TestApplication.model.Model");
 goog.require("TestApplication.History");
 goog.require("TestApplication.commands.AddShapeCommand");
-
+goog.require("TestApplication.Constants");
 
 goog.scope(function(){
+    var Constants = TestApplication.Constants;
     /**
      * @constructor
      */
@@ -25,11 +26,11 @@ goog.scope(function(){
             this._view = new TestApplication.view.View();
 
             this._dispatcher.addEventListener(TestApplication.EventType.ACTION, goog.bind(function (e) {
-                if (e.detail.id == "undo")
+                if (e.detail.id == Constants.UNDO)
                 {
                     this._undo();
                 }
-                else if (e.detail.id == "redo")
+                else if (e.detail.id == Constants.REDO)
                 {
                     this._redo();
                 }
