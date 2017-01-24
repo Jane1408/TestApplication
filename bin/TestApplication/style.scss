@@ -1,7 +1,84 @@
-body {
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  cursor: default;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+.canvas {
+  position: absolute;
+  top: 55px;
+  left: 0;
+  background-color: transparent;
+}
+
+.triangle{
+  background: url("../../res/triangle.png") no-repeat;
+  position: absolute;
+  width: 55px;
+  height: 55px;
+  top: 0;
+  left:0;
+}
+.ellipse{
+  background: url("../../res/ellipse.png") no-repeat;
+  position: absolute;
+  width: 55px;
+  height: 55px;
+  top: 0;
+  left: 55px;
+}
+.rectangle{
+  background: url("../../res/rectangle.png") no-repeat;
+  position: absolute;
+  width: 55px;
+  height: 55px;
+  top: 0;
+  left: 110px;
+}
+.undo{
+  background: url("../../res/undo.png") no-repeat;
+  position: absolute;
+  width: 55px;
+  height: 55px;
+  top: 0;
+  right: 55px;
+}
+.redo{
+  background: url("../../res/redo.png") no-repeat;
+  position: absolute;
+  width: 55px;
+  height: 55px;
+  top: 0;
+  right: 0;
+}
+.toolbar{
+  position: absolute;
+  width: 640px;
+  height: 55px;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 255, 0.09);
+}
+
+.shape{
+  position: absolute;
+  background-color: yellow;
+  border-color: #ffaa00;
+}
+
+.frame {
+  position : absolute;
+  outline : 4px ridge #000000;
+  z-index: -1;
+}
+
+.frame-point{
+  position : absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  background-color: #FF0000;
+}
+
+.triangle-shape {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-left: 50px solid transparent;
+  border-right: 50px solid transparent;
+  border-bottom: 100px solid yellow;
 }

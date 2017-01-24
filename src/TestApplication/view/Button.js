@@ -12,12 +12,16 @@ goog.scope(function(){
         {   
             this._dispatcher = dispatcher;
             this._id = id;
-            this._button = goog.dom.createElement("button");
-            this._button.id = this._id;
+            /** @private {!Element} */
+            this._button = goog.dom.createElement(goog.dom.TagName.BUTTON);
+            this._button.setAttribute("class", this._id);
             this._button.type = "submit";
-            document.body.appendChild(this._button);
             this._button.addEventListener("click", goog.bind(this._buttonClicked, this));
         },
+
+        /**
+         * @private
+         */
         _buttonClicked: function()
         {
             var event = new CustomEvent(TestApplication.EventType.ACTION, {
@@ -25,6 +29,12 @@ goog.scope(function(){
                     "id" : this._id
                 }});
             this._dispatcher.dispatchEvent(event);
+        },
+
+        getButton:function()
+        {
+            return this._button;
         }
+
     });
 });

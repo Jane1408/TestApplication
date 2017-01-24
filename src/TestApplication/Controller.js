@@ -5,10 +5,11 @@ goog.require("TestApplication.view.Toolbar");
 goog.require("TestApplication.model.Model");
 goog.require("TestApplication.History");
 goog.require("TestApplication.commands.AddShapeCommand");
-goog.require("TestApplication.Constants");
+goog.require("TestApplication.commands.MoveShapeCommand");
+goog.require("TestApplication.ButtonType");
 
 goog.scope(function(){
-    var Constants = TestApplication.Constants;
+    const ButtonType = TestApplication.ButtonType;
     /**
      * @constructor
      */
@@ -26,25 +27,71 @@ goog.scope(function(){
             this._view = new TestApplication.view.View();
 
             this._dispatcher.addEventListener(TestApplication.EventType.ACTION, goog.bind(function (e) {
-                if (e.detail.id == Constants.UNDO)
-                {
+                if (e.detail.id == ButtonType.UNDO) {
                     this._undo();
                 }
-                else if (e.detail.id == Constants.REDO)
-                {
+                else if (e.detail.id == ButtonType.REDO) {
                     this._redo();
                 }
-                else
-                {
+                else {
                     this._addShape(e.detail.id);
                 }
             },this),false);
 
+            this._dispatcher.addEventListener(TestApplication.EventType.SHAPE_ADDED, goog.bind(function (e) {
+                this._view.drawShape(e.detail);
+            },this),false);
 
+            this._dispatcher.addEventListener(TestApplication.EventType.REDRAW_SHAPE, goog.bind(function (e) {
+                this._view.redrawShape(e.detail);
+            },this),false);
+
+            var canvas = this._view.getBody();
+            canvas.onmousedown = goog.bind(function (e) {
+                var key = this._model.getShapeKey(e);
+                if (key) {
+                    var shapeModel = this._model.getShapeByKey(key);
+                    this._view.trySelectShape(key);
+                    var shift = new goog.math.Coordinate( e.pageX - shapeModel.getPosition().x, e.pageY - shapeModel.getPosition().y);
+                    var pos = new goog.math.Coordinate( e.pageX - shift.x, e.pageY - shift.y);
+                    document.onmousemove = goog.bind(function(e) {
+                        pos = new goog.math.Coordinate( e.pageX - shift.x, e.pageY - shift.y);
+                        this._view.moveShapeView(key, pos);
+                    },this);
+
+                    canvas.onmouseup = goog.bind(function() {
+                        console.log("1!");
+                        this._moveShape(shapeModel, pos);
+                        
+                        document.onmousemove = null;
+                        canvas.onmousedowm = null;
+                    },this);
+                }
+                else {
+                    if (this._view.isShapeSelected()) this._view.deselect();
+                }
+            }, this);
+            
         },
+
+        /**
+         * @param {string} type
+         * @private
+         */
         _addShape: function(type)
         {
             var command = new TestApplication.commands.AddShapeCommand(this._model, type);
+            this._history.addCommand(command);
+        },
+
+        /**
+         * @param {TestApplication.model.ShapeModel} shape
+         * @private
+         */
+        _moveShape: function(shape, pos)
+        {
+            console.log("2!");
+            var command = new TestApplication.commands.MoveShapeCommand(shape, pos);
             this._history.addCommand(command);
         },
 

@@ -8,16 +8,23 @@ goog.scope(function()
     TestApplication.model.Model = goog.defineClass(null, {
         constructor:function()
         {
-            /**@private {Array}*/
+            /**@private {Array<TestApplication.model.ShapeModel>}*/
             this._data = [];
         },
-
-
+        
+        /**
+         * @param {TestApplication.model.ShapeModel} shape
+         */
         addShape:function(shape)
         {
+            shape.setPosition( new goog.math.Coordinate(TestApplication.model.Model.CENTER_X, TestApplication.model.Model.CENTER_Y));
             goog.array.insert(this._data, shape);
+            
         },
 
+        /**
+         * @param {TestApplication.model.ShapeModel} shape
+         */
         removeShape:function(shape)
         {
             for (var i = 0; i != this._data.length; ++i)
@@ -29,5 +36,39 @@ goog.scope(function()
                 }
             }
         },
+
+        getShapeKey: function(detail)
+        {
+            for(var i = this._data.length - 1; i >= 0; --i)
+            {
+                var position = this._data[i].getPosition();
+                var size = this._data[i].getSize();
+
+                if ((position.x <= detail.pageX && detail.pageX <= position.x + size.width) &&
+                    position.y + 55 <= detail.pageY && detail.pageY <= position.y + size.height + 55)
+                {
+                    return this._data[i].getKey();
+                }
+            }
+            return 0;
+        },
+
+        getShapeByKey: function(key)
+        {
+            for(var i = 0; i != this._data.length; ++i)
+            {
+                if ( key == this._data[i].getKey())
+                {
+                    return this._data[i];
+                }
+            }
+            return null;
+        },
+
+        statics:
+        {
+            CENTER_X: 270,
+            CENTER_Y: 190,
+        }
     })
 });

@@ -12,6 +12,9 @@ goog.scope(function()
         constructor:function(model, type)
         {
             this._model = model;
+            /**
+             * @type {TestApplication.model.ShapeModel}
+             */
             this._newShape = new TestApplication.model.ShapeModel(type);
         },
 
@@ -21,6 +24,11 @@ goog.scope(function()
         execute:function()
         {
             this._model.addShape(this._newShape);
+            var event = new CustomEvent(TestApplication.EventType.SHAPE_ADDED, {
+                "detail" :{
+                    "shape" : this._newShape
+                }});
+            document.dispatchEvent(event);
         },
 
         /**
@@ -29,6 +37,11 @@ goog.scope(function()
         unExecute:function()
         {
             this._model.removeShape(this._newShape);
+            var event = new CustomEvent(TestApplication.EventType.SHAPE_REMOVED, {
+                "detail" :{
+                    "shape" : this._newShape
+                }});
+            document.dispatchEvent(event);
         }
     })
 });

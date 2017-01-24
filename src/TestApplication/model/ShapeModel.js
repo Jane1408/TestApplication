@@ -9,22 +9,26 @@ goog.scope(function(){
         constructor: function(type)
         {
             this._type = type;
-            this._position = new goog.math.Coordinate(TestApplication.model.ShapeModel.POS_X,
-                TestApplication.model.ShapeModel.POS_Y);
+            /**
+             * @type {goog.math.Coordinate}
+             */
+            this._position = new goog.math.Coordinate(0, 0);
             this._size =new goog.math.Size(TestApplication.model.ShapeModel.SHAPE_WIDTH,
                 TestApplication.model.ShapeModel.SHAPE_HEIGHT);
+            this._key = goog.getUid(this);
+            console.log(this._key);
         },
+        
         /**
-         * @public
-         * @param position {goog.math.Coordinate}
+         * @param {goog.math.Coordinate} position
          */
         setPosition:function(position)
         {
             this._position = position;
         },
+        
         /**
-         * @public
-         * @param size
+         * @param {goog.math.Size} size
          */
         setSize:function(size)
         {
@@ -32,7 +36,6 @@ goog.scope(function(){
         },
 
         /**
-         * @public
          * @returns {string}
          */
         getType:function()
@@ -41,7 +44,6 @@ goog.scope(function(){
         },
 
         /**
-         * @public
          * @returns {goog.math.Coordinate}
          */
         getPosition:function()
@@ -50,20 +52,22 @@ goog.scope(function(){
         },
 
         /**
-         * @public
-         * @returns {goog.math.Size|*|number}
+         * @returns {goog.math.Size}
          */
         getSize:function()
         {
             return this._size;
         },
 
+        getKey: function()
+        {
+            return this._key;
+        },
+
         statics:
         {
             SHAPE_WIDTH: 100,
             SHAPE_HEIGHT: 100,
-            POS_X: document.documentElement.clientWidth/2,
-            POS_Y: document.documentElement.clientHeight/2
         }
     });
 });

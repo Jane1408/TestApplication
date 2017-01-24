@@ -6,7 +6,7 @@ goog.scope(function()
      * @constructor
      */
     TestApplication.History = goog.defineClass(null, {
-        constructor:function()
+        constructor: function()
         {
             /**@private {Array}*/
             this._commands = [];
@@ -19,7 +19,7 @@ goog.scope(function()
          * @public
          * @param command
          */
-        addCommand:function(command)
+        addCommand: function(command)
         {
             if (this._currentCommsnd < this._commands.length - 1)
             {
@@ -33,7 +33,7 @@ goog.scope(function()
         /**
          * @public
          */
-        undo:function()
+        undo: function()
         {
             if (this._currentCommsnd > 0)
             {
@@ -44,7 +44,7 @@ goog.scope(function()
         /**
          * @public
          */
-        redo:function()
+        redo: function()
         {
             if (this._currentCommsnd < this._commands.length)
             {
