@@ -1,6 +1,5 @@
 goog.provide("TestApplication.commands.MoveShapeCommand");
 
-goog.require("goog.array");
 goog.require("goog.math");
 
 goog.scope(function()
@@ -27,7 +26,6 @@ goog.scope(function()
          */
         execute:function()
         {
-            console.log("3!");
             this._shape.setPosition(this._newPos);
             var event = new CustomEvent(TestApplication.EventType.REDRAW_SHAPE, {
             "detail":{
@@ -36,9 +34,6 @@ goog.scope(function()
             }
             });
             document.dispatchEvent(event);
-
-
-            console.log(this._shape.getPosition() + " == " + this._newPos);
         },
 
         /**
@@ -54,8 +49,6 @@ goog.scope(function()
                 }
             });
             document.dispatchEvent(event);
-
-            console.log("back");
         }
     })
 });

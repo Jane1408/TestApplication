@@ -6,18 +6,19 @@ goog.require("TestApplication.ButtonType");
 goog.require("goog.dom");
 
 goog.scope(function(){
-    const ShapeType = TestApplication.ShapeType;
-    const ButtonType = TestApplication.ButtonType;
+    const SHAPE_TYPE = TestApplication.ShapeType;
+    const BUTTON_TYPE = TestApplication.ButtonType;
     /*
      * @constructor
+     * @param {document} dispatcher
      */
     TestApplication.view.Toolbar = goog.defineClass(null, {
         constructor: function (dispatcher) {
+            /** @private {document} */
             this._dispatcher = dispatcher;
-            this._toolbar = goog.dom.createElement(goog.dom.TagName.DIV);
-            this._toolbar.setAttribute("class", ButtonType.TOOLBAR);
-            document.body.appendChild(this._toolbar);
+            /** @private {Array<TestApplication.view.Button>} */
             this._buttons = [];
+            this._createToolbar();
             this._createButtons();
             this._appendButtons();
         },
@@ -25,12 +26,23 @@ goog.scope(function(){
         /**
          * @private
          */
+        _createToolbar: function()
+        {
+            /** @private {Element} */
+            this._toolbar = goog.dom.createElement(goog.dom.TagName.DIV);
+            this._toolbar.setAttribute("class", BUTTON_TYPE.TOOLBAR);
+            document.body.appendChild(this._toolbar);
+        },
+        
+        /**
+         * @private
+         */
         _createButtons: function () {
-            this._buttons.push(new TestApplication.view.Button(ShapeType.ELLIPSE, this._dispatcher));
-            this._buttons.push(new TestApplication.view.Button(ShapeType.TRIANGLE, this._dispatcher));
-            this._buttons.push(new TestApplication.view.Button(ShapeType.RECTANGLE, this._dispatcher));
-            this._buttons.push(new TestApplication.view.Button(ButtonType.UNDO, this._dispatcher));
-            this._buttons.push(new TestApplication.view.Button(ButtonType.REDO, this._dispatcher));
+            this._buttons.push(new TestApplication.view.Button(SHAPE_TYPE.ELLIPSE, this._dispatcher));
+            this._buttons.push(new TestApplication.view.Button(SHAPE_TYPE.TRIANGLE, this._dispatcher));
+            this._buttons.push(new TestApplication.view.Button(SHAPE_TYPE.RECTANGLE, this._dispatcher));
+            this._buttons.push(new TestApplication.view.Button(BUTTON_TYPE.UNDO, this._dispatcher));
+            this._buttons.push(new TestApplication.view.Button(BUTTON_TYPE.REDO, this._dispatcher));
         },
         
         /**

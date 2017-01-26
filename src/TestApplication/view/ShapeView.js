@@ -15,6 +15,37 @@ goog.scope(function()
         },
 
         /**
+         * @virtual
+         * @returns {number}
+         */
+        getIndex:function() {},
+
+        /**
+         * @virtual
+         * @param {goog.math.Coordinate} clickPos
+         * @returns {boolean}
+         */
+        hitTest:function(clickPos) {},
+
+        /**
+         * @virtual
+         * @returns {Element}
+         */
+        getObject:function() {},
+
+        /**
+         * @virtual
+         */
+        redraw:function() {},
+
+
+        /**
+         * @virtual
+         * @param {goog.math.Coordinate} pos
+         */
+        move:function(pos) {},
+        
+        /**
          * @returns {number}
          */
         getKey: function()

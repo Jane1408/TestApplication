@@ -9,13 +9,14 @@ goog.require("TestApplication.commands.MoveShapeCommand");
 goog.require("TestApplication.ButtonType");
 
 goog.scope(function(){
-    const ButtonType = TestApplication.ButtonType;
+    const BUTTON_TYPE = TestApplication.ButtonType;
     /**
      * @constructor
      */
     TestApplication.Controller = goog.defineClass(null, {
         constructor: function()
         {
+            /**@private {document}*/
             this._dispatcher = document;
             /**@private {TestApplication.model.Model}*/
             this._model = new TestApplication.model.Model();
@@ -26,29 +27,49 @@ goog.scope(function(){
             /**@private {TestApplication.view.View}*/
             this._view = new TestApplication.view.View();
 
+            this._addToolbarActionListen();
+            this._addShapeAddedListen();
+            this._addShapeMoveListen();
+            this._addRedrawShapeListen();
+            
+        },
+
+        /**
+         * @private
+         */
+        _addToolbarActionListen: function()
+        {
             this._dispatcher.addEventListener(TestApplication.EventType.ACTION, goog.bind(function (e) {
-                if (e.detail.id == ButtonType.UNDO) {
+                if (e.detail.id == BUTTON_TYPE.UNDO) {
                     this._undo();
                 }
-                else if (e.detail.id == ButtonType.REDO) {
+                else if (e.detail.id == BUTTON_TYPE.REDO) {
                     this._redo();
                 }
                 else {
                     this._addShape(e.detail.id);
                 }
             },this),false);
+        },
 
+        /**
+         * @private
+         */
+        _addShapeAddedListen: function()
+        {
             this._dispatcher.addEventListener(TestApplication.EventType.SHAPE_ADDED, goog.bind(function (e) {
                 this._view.drawShape(e.detail);
             },this),false);
+        },
 
-            this._dispatcher.addEventListener(TestApplication.EventType.REDRAW_SHAPE, goog.bind(function (e) {
-                this._view.redrawShape(e.detail);
-            },this),false);
-
+        /**
+         * @private
+         */
+        _addShapeMoveListen: function()
+        {
             var canvas = this._view.getBody();
             canvas.onmousedown = goog.bind(function (e) {
-                var key = this._model.getShapeKey(e);
+                var key = this._view.hitTest(e);
                 if (key) {
                     var shapeModel = this._model.getShapeByKey(key);
                     this._view.trySelectShape(key);
@@ -60,9 +81,8 @@ goog.scope(function(){
                     },this);
 
                     canvas.onmouseup = goog.bind(function() {
-                        console.log("1!");
                         this._moveShape(shapeModel, pos);
-                        
+
                         document.onmousemove = null;
                         canvas.onmousedowm = null;
                     },this);
@@ -71,12 +91,21 @@ goog.scope(function(){
                     if (this._view.isShapeSelected()) this._view.deselect();
                 }
             }, this);
-            
         },
 
         /**
-         * @param {string} type
          * @private
+         */
+        _addRedrawShapeListen: function()
+        {
+            this._dispatcher.addEventListener(TestApplication.EventType.REDRAW_SHAPE, goog.bind(function (e) {
+                this._view.redrawShape(e.detail);
+            },this),false);
+        },
+
+        /**
+         * @private
+         * @param {string} type
          */
         _addShape: function(type)
         {
@@ -85,12 +114,12 @@ goog.scope(function(){
         },
 
         /**
-         * @param {TestApplication.model.ShapeModel} shape
          * @private
+         * @param {TestApplication.model.ShapeModel} shape
+         * @param {goog.math.Coordinate} pos
          */
         _moveShape: function(shape, pos)
         {
-            console.log("2!");
             var command = new TestApplication.commands.MoveShapeCommand(shape, pos);
             this._history.addCommand(command);
         },

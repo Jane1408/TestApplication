@@ -16,35 +16,50 @@ goog.scope(function()
             goog.base(this, model);
             this._shape = goog.dom.createElement(goog.dom.TagName.DIV);
             this._shape.setAttribute("class", "triangle-shape");
-        /*    goog.style.setStyle(this._shape, "border-left", (this._size.width /2) + "px solid transparent");
-            goog.style.setStyle(this._shape, "border-right", (this._size.width /2) + "px solid transparent");
-            goog.style.setStyle(this._shape, "border-bottom", (this._size.width) + "px solid red"); */
             goog.style.setPosition(this._shape,  this.getPosition());
-         
-
-            //this._shape.setAttribute("class", "shape");
-        //    goog.style.setPosition(this._shape,  this._position);
-        //    goog.style.setSize(this._shape, this._size);
-
         },
-
+        
+        /**
+         * @inheritDoc
+         */
         getIndex: function()
         {
             return this.getKey();
         },
 
+        /**
+         * @inheritDoc
+         */
         getObject: function()
         {
             return this._shape;
         },
 
+        /**
+         * @inheritDoc
+         */
         redraw: function()
         {
             goog.style.setPosition(this._shape,  this.getPosition());
         },
 
+        /**
+         * @inheritDoc
+         */
         move: function(pos){
             goog.style.setPosition(this._shape, pos);
+        },
+
+        /**
+         * @inheritDoc
+         */
+        hitTest: function(clickPos) {
+            var topLeft = this.getPosition();
+            var bottomRight = new goog.math.Coordinate(this.getSize().width + topLeft.x, this.getSize().height + topLeft.y);
+            return (clickPos.y > 2 * (topLeft.y - bottomRight.y) * (clickPos.x - topLeft.x) / (bottomRight.x - topLeft.x) + bottomRight.y
+            && clickPos.y > 2 * (topLeft.y - bottomRight.y) * (clickPos.x - bottomRight.x) / (topLeft.x - bottomRight.x) + bottomRight.y
+            && clickPos.y < bottomRight.y); 
+ 
         }
     })
 });

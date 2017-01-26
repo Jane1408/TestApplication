@@ -6,10 +6,10 @@ goog.provide("TestApplication.EventType");
     TestApplication.EventType = {
         UNDO: "undo",
         REDO: "redo",
-        ADD_SHAPE: "add shape",
-        SHAPE_ADDED: "shape added",
-        SHAPE_REMOVED: "shape removed",
-        SHAPE_MOVE: "shape move",
-        REDRAW_SHAPE: "redraw shape",
+        ADD_SHAPE: "addShape",
+        SHAPE_ADDED: "shapeAdded",
+        SHAPE_REMOVED: "shapeRemoved",
+        SHAPE_MOVE: "shapeMove",
+        REDRAW_SHAPE: "redrawShape",
         ACTION: "action",
     };

@@ -45,7 +45,8 @@ goog.scope(function()
                 var size = this._data[i].getSize();
 
                 if ((position.x <= detail.pageX && detail.pageX <= position.x + size.width) &&
-                    position.y + 55 <= detail.pageY && detail.pageY <= position.y + size.height + 55)
+                    position.y<= detail.pageY - TestApplication.model.Model.TOOLBAR_OFFSET &&
+                    detail.pageY - TestApplication.model.Model.TOOLBAR_OFFSET <= position.y + size.height)
                 {
                     return this._data[i].getKey();
                 }
@@ -69,6 +70,7 @@ goog.scope(function()
         {
             CENTER_X: 270,
             CENTER_Y: 190,
+            TOOLBAR_OFFSET: 55,
         }
     })
 });

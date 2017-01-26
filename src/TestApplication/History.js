@@ -12,7 +12,7 @@ goog.scope(function()
             this._commands = [];
 
             /**@private {number}*/
-            this._currentCommsnd = 0;
+            this._currentCommand = 0;
         },
 
         /**
@@ -21,13 +21,13 @@ goog.scope(function()
          */
         addCommand: function(command)
         {
-            if (this._currentCommsnd < this._commands.length - 1)
+            if (this._currentCommand < this._commands.length - 1)
             {
-                this._commands.splice(this._currentCommsnd);
+                this._commands.splice(this._currentCommand);
             }
             goog.array.insert(this._commands, command);
             command.execute();
-            ++this._currentCommsnd;
+            ++this._currentCommand;
         },
 
         /**
@@ -35,9 +35,9 @@ goog.scope(function()
          */
         undo: function()
         {
-            if (this._currentCommsnd > 0)
+            if (this._currentCommand > 0)
             {
-                this._commands[--this._currentCommsnd].unExecute();
+                this._commands[--this._currentCommand].unExecute();
             }
         },
 
@@ -46,9 +46,9 @@ goog.scope(function()
          */
         redo: function()
         {
-            if (this._currentCommsnd < this._commands.length)
+            if (this._currentCommand < this._commands.length)
             {
-                this._commands[this._currentCommsnd++].execute();
+                this._commands[this._currentCommand++].execute();
             }
         }
     })

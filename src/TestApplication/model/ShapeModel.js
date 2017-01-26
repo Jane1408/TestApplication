@@ -16,7 +16,6 @@ goog.scope(function(){
             this._size =new goog.math.Size(TestApplication.model.ShapeModel.SHAPE_WIDTH,
                 TestApplication.model.ShapeModel.SHAPE_HEIGHT);
             this._key = goog.getUid(this);
-            console.log(this._key);
         },
         
         /**
@@ -59,6 +58,9 @@ goog.scope(function(){
             return this._size;
         },
 
+        /**
+         * @returns {number}
+         */
         getKey: function()
         {
             return this._key;
@@ -66,7 +68,9 @@ goog.scope(function(){
 
         statics:
         {
+            /* @type {number}*/
             SHAPE_WIDTH: 100,
+            /* @type {number}*/
             SHAPE_HEIGHT: 100,
         }
     });
