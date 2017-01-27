@@ -1,16 +1,17 @@
-goog.provide("TestApplication.commands.Command");
+goog.provide("TestApplication.commands.ICommand");
 
 goog.scope(function()
 {
     /**
      * @constructor
      */
-    TestApplication.commands.Command = goog.defineClass(null, {
+    TestApplication.commands.ICommand = goog.defineClass(null, {
         constructor:function()
         {
         },
 
         /**
+         * @virtual
          * @public
          */
         execute:function()
@@ -18,6 +19,7 @@ goog.scope(function()
         },
 
         /**
+         * @virtual
          * @public
          */
         unExecute:function()

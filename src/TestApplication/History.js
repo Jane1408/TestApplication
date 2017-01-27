@@ -8,7 +8,7 @@ goog.scope(function()
     TestApplication.History = goog.defineClass(null, {
         constructor: function()
         {
-            /**@private {Array}*/
+            /**@private {Array<TestApplication.commands.Command>}*/
             this._commands = [];
 
             /**@private {number}*/
@@ -16,7 +16,6 @@ goog.scope(function()
         },
 
         /**
-         * @public
          * @param command
          */
         addCommand: function(command)
@@ -25,7 +24,7 @@ goog.scope(function()
             {
                 this._commands.splice(this._currentCommand);
             }
-            goog.array.insert(this._commands, command);
+            this._commands.push(command);
             command.execute();
             ++this._currentCommand;
         },

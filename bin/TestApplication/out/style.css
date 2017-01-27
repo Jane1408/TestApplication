@@ -55,15 +55,15 @@
 .shape {
   position: absolute;
   background-color: yellow;
-}
+  border: solid 2px #ffaa00;
+ }
 
 .frame {
   position: absolute;
-  outline: 4px ridge #000000;
-  z-index: inherit; }
+  border: 2px solid #FF0000;  }
 
 .frame-point {
-  position: absolute;
+  position: inherit;
   width: 10px;
   height: 10px;
   border-radius: 5px;
@@ -75,5 +75,5 @@
   height: 0;
   border-left: 50px solid transparent;
   border-right: 50px solid transparent;
-  border-bottom: 100px solid yellow;
-}
+  border-bottom: 100px solid #fff536;
+  }

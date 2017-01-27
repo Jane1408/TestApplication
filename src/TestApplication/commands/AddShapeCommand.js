@@ -1,6 +1,6 @@
 goog.provide("TestApplication.commands.AddShapeCommand");
 
-goog.require("TestApplication.commands.Command");
+goog.require("TestApplication.commands.ICommand");
 goog.require("TestApplication.model.ShapeModel");
 
 goog.scope(function()
@@ -8,18 +8,17 @@ goog.scope(function()
     /**
      * @constructor
      */
-    TestApplication.commands.AddShapeCommand = goog.defineClass(TestApplication.commands.Command, {
+    TestApplication.commands.AddShapeCommand = goog.defineClass(TestApplication.commands.ICommand, {
         constructor:function(model, type)
         {
+            this._dispatcher = document;
             this._model = model;
-            /**
-             * @type {TestApplication.model.ShapeModel}
-             */
+            /** @type {TestApplication.model.ShapeModel} */
             this._newShape = new TestApplication.model.ShapeModel(type);
         },
 
         /**
-         * @public
+         * @inheritDoc
          */
         execute:function()
         {
@@ -28,20 +27,20 @@ goog.scope(function()
                 "detail" :{
                     "shape" : this._newShape
                 }});
-            document.dispatchEvent(event);
+            this._dispatcher.dispatchEvent(event);
         },
 
         /**
-         * @public
+         * @inheritDoc
          */
         unExecute:function()
         {
             this._model.removeShape(this._newShape);
-            var event = new CustomEvent(TestApplication.EventType.SHAPE_REMOVED, {
+            var event = new CustomEvent(TestApplication.EventType.REMOVE_SHAPE, {
                 "detail" :{
                     "shape" : this._newShape
                 }});
-            document.dispatchEvent(event);
+            this._dispatcher.dispatchEvent(event);
         }
     })
 });

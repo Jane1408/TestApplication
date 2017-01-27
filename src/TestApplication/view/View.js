@@ -24,14 +24,14 @@ goog.scope(function() {
 
             /**@private {number}*/
             this._height = TestApplication.view.View.CANVAS_HEIGHT;
-
-            this._createBody();
-
+            
             /** @private {TestApplication.view.Frame} */
             this._frame = new TestApplication.view.Frame();
 
             /** @private {TestApplication.view.ShapeView} */
-            this._selectedShape = null;
+            this._selectedShape = null; 
+            
+            this._createBody();
         },
 
         /**
@@ -43,6 +43,16 @@ goog.scope(function() {
             this._body.setAttribute("class", "canvas");
             goog.style.setSize(this._body, new goog.math.Size(this._width, this._height));
             document.body.appendChild(this._body);
+        },
+        
+        getIndexOfSelectedShape: function()
+        {
+            if (this._selectedShape != null)
+            {
+                return this._selectedShape.getIndex();
+            }
+            return 0;
+            
         },
 
         isShapeSelected: function () {
@@ -99,6 +109,19 @@ goog.scope(function() {
             this._frame.setPosition(detail.pos);
         },
 
+        removeShape: function (detail) {
+            var shape = detail.shape;
+            for (var i = 0; i != this._shapes.length; ++i) {
+                if (shape.getKey() == this._shapes[i].getIndex()) {
+                    this._body.removeChild(this._shapes[i].getObject());
+                    this._shapes.splice(i--, 1);
+                    break;
+                }
+            }
+            this.deselect();
+            console.log("this._shapes.length = " + this._shapes.length);
+        },
+
         moveShapeView: function (key, pos) {
             var shape = this.getShapeByKey(key);
             shape.move(pos);
@@ -116,10 +139,9 @@ goog.scope(function() {
                 }
             }
             return null;
-
         },
 
-        trySelectShape: function (key) {
+        selectShape: function (key) {
             var shape = this.getShapeByKey(key);
             if (typeof shape != 'undefined') {
                 this._frame.setShape(shape);
@@ -128,7 +150,7 @@ goog.scope(function() {
             }
         },
 
-        hitTest: function (detail) {
+        getShapeIndexByClickPos: function (detail) {
             var clickPos = new goog.math.Coordinate(detail.pageX, detail.pageY - TestApplication.view.View.TOOLBAR_OFFSET);
             if (clickPos.y <= TestApplication.view.View.CANVAS_HEIGHT &&
                 clickPos.x <= TestApplication.view.View.CANVAS_WIDTH)
@@ -144,8 +166,13 @@ goog.scope(function() {
             return 0;
         },
 
+        checkResizePointsOnclick: function(detail)
+        {
+            var pos = new goog.math.Coordinate(detail.pageX, detail.pageY - TestApplication.view.View.TOOLBAR_OFFSET);
+            return (this._frame.isActive() && this._frame.checkPoints(pos));
+        },
 
-        statics: {
+         statics: {
             /**@type {number}*/
             CANVAS_WIDTH: 640,
             /**@type {number}*/

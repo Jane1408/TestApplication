@@ -6,6 +6,7 @@ goog.require("TestApplication.model.Model");
 goog.require("TestApplication.History");
 goog.require("TestApplication.commands.AddShapeCommand");
 goog.require("TestApplication.commands.MoveShapeCommand");
+goog.require("TestApplication.commands.RemoveShapeCommand");
 goog.require("TestApplication.ButtonType");
 
 goog.scope(function(){
@@ -31,7 +32,11 @@ goog.scope(function(){
             this._addShapeAddedListen();
             this._addShapeMoveListen();
             this._addRedrawShapeListen();
-            
+            this._addDeleteClickListen();
+            this._addRemoveShapeListen();
+
+
+
         },
 
         /**
@@ -69,28 +74,38 @@ goog.scope(function(){
         {
             var canvas = this._view.getBody();
             canvas.onmousedown = goog.bind(function (e) {
-                var key = this._view.hitTest(e);
+                var key = this._view.getShapeIndexByClickPos(e);
                 if (key) {
-                    var shapeModel = this._model.getShapeByKey(key);
-                    this._view.trySelectShape(key);
-                    var shift = new goog.math.Coordinate( e.pageX - shapeModel.getPosition().x, e.pageY - shapeModel.getPosition().y);
-                    var pos = new goog.math.Coordinate( e.pageX - shift.x, e.pageY - shift.y);
-                    document.onmousemove = goog.bind(function(e) {
-                        pos = new goog.math.Coordinate( e.pageX - shift.x, e.pageY - shift.y);
-                        this._view.moveShapeView(key, pos);
-                    },this);
-
-                    canvas.onmouseup = goog.bind(function() {
-                        this._moveShape(shapeModel, pos);
-
-                        document.onmousemove = null;
-                        canvas.onmousedowm = null;
-                    },this);
+                    this._moveListen(canvas, key, e);
+                }
+                else if (this._view.isShapeSelected() && this._view.checkResizePointsOnclick(e)){
+                    
                 }
                 else {
-                    if (this._view.isShapeSelected()) this._view.deselect();
+                    this._view.deselect();
                 }
             }, this);
+        },
+        
+        /**
+         * @private
+         */
+        _moveListen: function(canvas, key, e)
+        {
+            var shapeModel = this._model.getShapeByKey(key);
+            this._view.selectShape(key);
+            var shift = new goog.math.Coordinate( e.pageX - shapeModel.getPosition().x, e.pageY - shapeModel.getPosition().y);
+            var pos = new goog.math.Coordinate( e.pageX - shift.x, e.pageY - shift.y);
+            document.onmousemove = goog.bind(function(e) {
+                pos = new goog.math.Coordinate( e.pageX - shift.x, e.pageY - shift.y);
+                this._view.moveShapeView(key, pos);
+            },this);
+
+            canvas.onmouseup = goog.bind(function() {
+                this._moveShape(shapeModel, pos);
+                document.onmousemove = null;
+                canvas.onmousedowm = null;
+            },this);
         },
 
         /**
@@ -105,11 +120,43 @@ goog.scope(function(){
 
         /**
          * @private
+         */
+        _addDeleteClickListen: function() {
+            this._dispatcher.addEventListener("keypress", goog.bind(function (e) {
+                if (e.keyCode == 46 && this._view.isShapeSelected()) {
+                    var shape = this._model.getShapeByKey(this._view.getIndexOfSelectedShape());
+                    this._removeShape(shape);
+                }
+            }, this), false);
+        },
+
+        /**
+         * @private
+         */
+        _addRemoveShapeListen: function()
+        {
+            this._dispatcher.addEventListener(TestApplication.EventType.REMOVE_SHAPE, goog.bind(function (e) {
+                this._view.removeShape(e.detail);
+            },this),false);
+        },
+
+        /**
+         * @private
          * @param {string} type
          */
         _addShape: function(type)
         {
             var command = new TestApplication.commands.AddShapeCommand(this._model, type);
+            this._history.addCommand(command);
+        },
+
+        /**
+         * @private
+         * @param {TestApplication.model.ShapeModel} shape
+         */
+        _removeShape: function(shape)
+        {
+            var command = new TestApplication.commands.RemoveShapeCommand(this._model, shape);
             this._history.addCommand(command);
         },
 
