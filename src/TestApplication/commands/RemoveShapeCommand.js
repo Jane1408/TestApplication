@@ -1,52 +1,49 @@
 goog.provide("TestApplication.commands.RemoveShapeCommand");
 
 goog.require("TestApplication.commands.ICommand");
-goog.require("goog.array");
-goog.require("goog.math");
 
-goog.scope(function()
-{
+goog.scope(function() {
     /**
      * @constructor
+     * @param {TestApplication.model.Model} model
+     * @param {TestApplication.model.ShapeModel} shape
+     * @extends {TestApplication.commands.ICommand}
      */
     TestApplication.commands.RemoveShapeCommand = goog.defineClass(TestApplication.commands.ICommand, {
-        constructor: function(model, shape)
-        {
+        constructor: function (model, shape) {
             this._dispatcher = document;
-            
+
             /**@private {TestApplication.model.Model}*/
             this._model = model;
 
             /**@private {TestApplication.model.ShapeModel}*/
             this._shape = shape;
-            
         },
 
         /**
          * @inheritDoc
          */
-        execute: function()
-        {
-            var event = new CustomEvent(TestApplication.EventType.REMOVE_SHAPE, {
-                "detail" : {
-                    "shape" : this._shape
-                }
-            });
-            this._dispatcher.dispatchEvent(event);
+        execute: function () {
             this._model.removeShape(this._shape);
+            var event = new CustomEvent(TestApplication.EventType.REMOVE_SHAPE, {
+                "detail": {
+                    "shape": this._shape
+                }
+            });
+            this._dispatcher.dispatchEvent(event);
         },
 
         /**
          * @inheritDoc
          */
-        unExecute: function(){
-            var event = new CustomEvent(TestApplication.EventType.REDRAW_SHAPE, {
-                "detail" : {
-                    "shape" : this._shape
+        unExecute: function () {
+            this._model.addShape(this._shape);
+            var event = new CustomEvent(TestApplication.EventType.SHAPE_ADDED, {
+                "detail": {
+                    "shape": this._shape
                 }
             });
             this._dispatcher.dispatchEvent(event);
-            this._model.addShape(this._shape);
-        }
+        },
     })
 });

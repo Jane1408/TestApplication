@@ -13,6 +13,7 @@
   top: 0;
   left:0;
 }
+
 .ellipse{
   background: url("../../res/ellipse.png") no-repeat;
   position: absolute;
@@ -21,6 +22,7 @@
   top: 0;
   left: 55px;
 }
+
 .rectangle{
   background: url("../../res/rectangle.png") no-repeat;
   position: absolute;
@@ -29,6 +31,7 @@
   top: 0;
   left: 110px;
 }
+
 .undo{
   background: url("../../res/undo.png") no-repeat;
   position: absolute;
@@ -37,6 +40,7 @@
   top: 0;
   right: 55px;
 }
+
 .redo{
   background: url("../../res/redo.png") no-repeat;
   position: absolute;
@@ -45,31 +49,34 @@
   top: 0;
   right: 0;
 }
+
 .toolbar{
   position: absolute;
   width: 640px;
   height: 55px;
   top: 0;
   left: 0;
-  background-color: rgba(0, 0, 255, 0.09);
+  background-color: #e3e0d6;
 }
 
 .shape {
   position: absolute;
-  background-color: yellow;
+  background-color: #ffff00;
   border: solid 2px #ffaa00;
 }
 
 .frame {
   position: absolute;
-  border: 2px solid #FF0000;  }
+  border: 2px solid #FF0000;
+}
 
 .frame-point {
   position: inherit;
   width: 10px;
   height: 10px;
   border-radius: 5px;
-  background-color: #FF0000; }
+  background-color: #FF0000;
+}
 
 .triangle-shape {
   position: absolute;
@@ -77,5 +84,5 @@
   height: 0;
   border-left: 50px solid transparent;
   border-right: 50px solid transparent;
-  border-bottom: 100px solid #fff536;
+  border-bottom: 100px solid #ffff00;
 }

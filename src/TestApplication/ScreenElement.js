@@ -1,9 +1,9 @@
-goog.provide("TestApplication.ButtonType");
+goog.provide("TestApplication.ScreenElement");
 
 /**
  * @enum {string}
  */
-TestApplication.ButtonType = {
+TestApplication.ScreenElement = {
     UNDO: "undo",
     REDO: "redo",
     TOOLBAR: "toolbar",

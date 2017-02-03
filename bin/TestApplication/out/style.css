@@ -50,17 +50,16 @@
   height: 55px;
   top: 0;
   left: 0;
-  background-color: rgba(0, 0, 255, 0.09); }
+  background-color: #e3e0d6; }
 
 .shape {
   position: absolute;
-  background-color: yellow;
-  border: solid 2px #ffaa00;
- }
+  background-color: #ffff00;
+  border: solid 2px #ffaa00; }
 
 .frame {
   position: absolute;
-  border: 2px solid #FF0000;  }
+  border: 2px solid #FF0000; }
 
 .frame-point {
   position: inherit;
@@ -75,5 +74,4 @@
   height: 0;
   border-left: 50px solid transparent;
   border-right: 50px solid transparent;
-  border-bottom: 100px solid #fff536;
-  }
+  border-bottom: 100px solid #ffff00; }

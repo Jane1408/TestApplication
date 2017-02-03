@@ -1,14 +1,12 @@
 goog.provide("TestApplication.History");
 
-goog.scope(function()
-{
+goog.scope(function() {
     /**
      * @constructor
      */
     TestApplication.History = goog.defineClass(null, {
-        constructor: function()
-        {
-            /**@private {Array<TestApplication.commands.Command>}*/
+        constructor: function () {
+            /**@private {Array<TestApplication.commands.ICommand>}*/
             this._commands = [];
 
             /**@private {number}*/
@@ -16,12 +14,10 @@ goog.scope(function()
         },
 
         /**
-         * @param command
+         * @param {TestApplication.commands.ICommand} command
          */
-        addCommand: function(command)
-        {
-            if (this._currentCommand < this._commands.length - 1)
-            {
+        addCommand: function (command) {
+            if (this._currentCommand < this._commands.length - 1) {
                 this._commands.splice(this._currentCommand);
             }
             this._commands.push(command);
@@ -32,10 +28,8 @@ goog.scope(function()
         /**
          * @public
          */
-        undo: function()
-        {
-            if (this._currentCommand > 0)
-            {
+        undo: function () {
+            if (this._currentCommand > 0 && (this._commands.length != 0)) {
                 this._commands[--this._currentCommand].unExecute();
             }
         },
@@ -43,10 +37,8 @@ goog.scope(function()
         /**
          * @public
          */
-        redo: function()
-        {
-            if (this._currentCommand < this._commands.length)
-            {
+        redo: function () {
+            if (this._currentCommand < this._commands.length) {
                 this._commands[this._currentCommand++].execute();
             }
         }

@@ -10,7 +10,7 @@ goog.provide("TestApplication.EventType");
         SHAPE_ADDED: "shapeAdded",
         SHAPE_REMOVED: "shapeRemoved",
         SHAPE_MOVE: "shapeMove",
-        REDRAW_SHAPE: "redrawShape",
+        UPDATE_SHAPE: "updateShape",
         REMOVE_SHAPE: "removeShape",
         ACTION: "action",
     };

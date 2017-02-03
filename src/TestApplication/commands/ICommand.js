@@ -1,29 +1,25 @@
 goog.provide("TestApplication.commands.ICommand");
 
-goog.scope(function()
-{
+goog.scope(function() {
     /**
      * @constructor
      */
     TestApplication.commands.ICommand = goog.defineClass(null, {
-        constructor:function()
-        {
+        constructor: function () {
         },
 
         /**
          * @virtual
          * @public
          */
-        execute:function()
-        {
+        execute: function () {
         },
 
         /**
          * @virtual
          * @public
          */
-        unExecute:function()
-        {
+        unExecute: function () {
         }
     })
 });

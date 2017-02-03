@@ -6,23 +6,25 @@ goog.require("TestApplication.model.Model");
 goog.require("TestApplication.History");
 goog.require("TestApplication.commands.AddShapeCommand");
 goog.require("TestApplication.commands.MoveShapeCommand");
+goog.require("TestApplication.commands.ResizeShapeCommand");
 goog.require("TestApplication.commands.RemoveShapeCommand");
-goog.require("TestApplication.ButtonType");
+goog.require("TestApplication.ScreenElement");
+goog.require("TestApplication.Constants");
 
-goog.scope(function(){
-    const BUTTON_TYPE = TestApplication.ButtonType;
+goog.scope(function() {
+    const SCREEN_ELEMENT = TestApplication.ScreenElement;
+    const CONST = TestApplication.Constants;
+
     /**
      * @constructor
      */
     TestApplication.Controller = goog.defineClass(null, {
-        constructor: function()
-        {
-            /**@private {document}*/
+        constructor: function () {
             this._dispatcher = document;
             /**@private {TestApplication.model.Model}*/
             this._model = new TestApplication.model.Model();
             /**@private {TestApplication.view.Toolbar}*/
-            this._toolbar = new TestApplication.view.Toolbar(this._dispatcher);
+            this._toolbar = new TestApplication.view.Toolbar();
             /**@private {TestApplication.History}*/
             this._history = new TestApplication.History();
             /**@private {TestApplication.view.View}*/
@@ -30,100 +32,128 @@ goog.scope(function(){
 
             this._addToolbarActionListen();
             this._addShapeAddedListen();
-            this._addShapeMoveListen();
+            this._addShapeMoveAndResizeListen();
             this._addRedrawShapeListen();
             this._addDeleteClickListen();
             this._addRemoveShapeListen();
-
-
-
         },
 
         /**
          * @private
          */
-        _addToolbarActionListen: function()
-        {
+        _addToolbarActionListen: function () {
             this._dispatcher.addEventListener(TestApplication.EventType.ACTION, goog.bind(function (e) {
-                if (e.detail.id == BUTTON_TYPE.UNDO) {
+                if (e.detail.id == SCREEN_ELEMENT.UNDO) {
                     this._undo();
                 }
-                else if (e.detail.id == BUTTON_TYPE.REDO) {
+                else if (e.detail.id == SCREEN_ELEMENT.REDO) {
                     this._redo();
                 }
                 else {
                     this._addShape(e.detail.id);
                 }
-            },this),false);
+            }, this), false);
         },
 
         /**
          * @private
          */
-        _addShapeAddedListen: function()
-        {
+        _addShapeAddedListen: function () {
             this._dispatcher.addEventListener(TestApplication.EventType.SHAPE_ADDED, goog.bind(function (e) {
                 this._view.drawShape(e.detail);
-            },this),false);
+            }, this), false);
         },
 
         /**
          * @private
          */
-        _addShapeMoveListen: function()
-        {
+        _addShapeMoveAndResizeListen: function () {
             var canvas = this._view.getBody();
             canvas.onmousedown = goog.bind(function (e) {
                 var key = this._view.getShapeIndexByClickPos(e);
-                if (key) {
-                    this._moveListen(canvas, key, e);
+                if (this._view.isShapeSelected() && this._view.checkResizePointsOnclick(e)) {
+                    this._resizeListen();
                 }
-                else if (this._view.isShapeSelected() && this._view.checkResizePointsOnclick(e)){
-                    
+                else if (key) {
+                    this._moveListen(key, e);
                 }
                 else {
                     this._view.deselect();
                 }
             }, this);
+            canvas.ondragstart = function() {
+                return false;
+            };
         },
-        
+
         /**
          * @private
+         * @param {number} key
+         * @param  e
          */
-        _moveListen: function(canvas, key, e)
-        {
+        _moveListen: function (key, e) {
+            goog.style.setStyle(document.documentElement, "cursor", "move");
             var shapeModel = this._model.getShapeByKey(key);
-            this._view.selectShape(key);
-            var shift = new goog.math.Coordinate( e.pageX - shapeModel.getPosition().x, e.pageY - shapeModel.getPosition().y);
-            var pos = new goog.math.Coordinate( e.pageX - shift.x, e.pageY - shift.y);
-            document.onmousemove = goog.bind(function(e) {
-                pos = new goog.math.Coordinate( e.pageX - shift.x, e.pageY - shift.y);
-                this._view.moveShapeView(key, pos);
-            },this);
+            if (shapeModel != null) {
+                this._view.selectShape(key);
+                var shift = new goog.math.Coordinate(e.pageX - shapeModel.getPosition().x, e.pageY - shapeModel.getPosition().y);
+                var pos = new goog.math.Coordinate(e.pageX - shift.x, e.pageY - shift.y);
+                document.onmousemove = goog.bind(function (e) {
+                    pos = new goog.math.Coordinate(e.pageX - shift.x, e.pageY - shift.y);
+                    this._view.moveShapeView(pos);
+                }, this);
 
-            canvas.onmouseup = goog.bind(function() {
-                this._moveShape(shapeModel, pos);
-                document.onmousemove = null;
-                canvas.onmousedowm = null;
-            },this);
+                document.onmouseup = goog.bind(function () {
+                    document.onmousemove = null;
+                    document.onmouseup = null;
+                    if (pos.x != shapeModel.getPosition().x && pos.y != shapeModel.getPosition().y) {
+                        this._moveShape(shapeModel, pos);
+                    }
+                    goog.style.setStyle(document.documentElement, "cursor", "default");
+                }, this);
+            }
         },
 
         /**
          * @private
          */
-        _addRedrawShapeListen: function()
-        {
-            this._dispatcher.addEventListener(TestApplication.EventType.REDRAW_SHAPE, goog.bind(function (e) {
+        _resizeListen: function () {
+            var key = this._view.getIndexOfSelectedShape();
+            var shapeModel = this._model.getShapeByKey(key);
+            if (shapeModel != null) {
+                document.onmousemove = goog.bind(function (e) {
+                    this._view.resizeShapeView(e);
+                }, this);
+
+                document.onmouseup = goog.bind(function () {
+                    document.onmousemove = null;
+                    document.onmouseup = null;
+                    var pos = this._view.getFramePosition();
+                    var size = this._view.getFrameSize();
+                    this._resizeShape(shapeModel, pos, size);
+                    goog.style.setStyle(document.documentElement, "cursor", "default");
+                }, this);
+            }
+            else{
+                goog.style.setStyle(document.documentElement, "cursor", "default");
+            }
+        },
+
+        /**
+         * @private
+         */
+        _addRedrawShapeListen: function () {
+            this._dispatcher.addEventListener(TestApplication.EventType.UPDATE_SHAPE, goog.bind(function (e) {
                 this._view.redrawShape(e.detail);
-            },this),false);
+            }, this), false);
         },
 
         /**
          * @private
          */
-        _addDeleteClickListen: function() {
+        _addDeleteClickListen: function () {
             this._dispatcher.addEventListener("keypress", goog.bind(function (e) {
-                if (e.keyCode == 46 && this._view.isShapeSelected()) {
+                if (e.keyCode == CONST.KEY_DELETE_CODE && this._view.isShapeSelected()) {
                     var shape = this._model.getShapeByKey(this._view.getIndexOfSelectedShape());
                     this._removeShape(shape);
                 }
@@ -133,19 +163,17 @@ goog.scope(function(){
         /**
          * @private
          */
-        _addRemoveShapeListen: function()
-        {
+        _addRemoveShapeListen: function () {
             this._dispatcher.addEventListener(TestApplication.EventType.REMOVE_SHAPE, goog.bind(function (e) {
                 this._view.removeShape(e.detail);
-            },this),false);
+            }, this), false);
         },
 
         /**
          * @private
          * @param {string} type
          */
-        _addShape: function(type)
-        {
+        _addShape: function (type) {
             var command = new TestApplication.commands.AddShapeCommand(this._model, type);
             this._history.addCommand(command);
         },
@@ -153,9 +181,19 @@ goog.scope(function(){
         /**
          * @private
          * @param {TestApplication.model.ShapeModel} shape
+         * @param {goog.math.Coordinate} pos
+         * @param {goog.math.Size} size
          */
-        _removeShape: function(shape)
-        {
+        _resizeShape: function (shape, pos, size) {
+            var command = new TestApplication.commands.ResizeShapeCommand(shape, pos, size);
+            this._history.addCommand(command);
+        },
+
+        /**
+         * @private
+         * @param {TestApplication.model.ShapeModel} shape
+         */
+        _removeShape: function (shape) {
             var command = new TestApplication.commands.RemoveShapeCommand(this._model, shape);
             this._history.addCommand(command);
         },
@@ -165,8 +203,7 @@ goog.scope(function(){
          * @param {TestApplication.model.ShapeModel} shape
          * @param {goog.math.Coordinate} pos
          */
-        _moveShape: function(shape, pos)
-        {
+        _moveShape: function (shape, pos) {
             var command = new TestApplication.commands.MoveShapeCommand(shape, pos);
             this._history.addCommand(command);
         },
@@ -174,16 +211,16 @@ goog.scope(function(){
         /**
          * @private
          */
-        _undo:function()
-        {
+        _undo: function () {
+            this._view.deselect();
             this._history.undo();
         },
 
         /**
          * @private
          */
-        _redo:function()
-        {
+        _redo: function () {
+            this._view.deselect();
             this._history.redo();
         }
     });

@@ -5,12 +5,12 @@ goog.require("goog.style");
 
 goog.scope(function()
 {
-    var shapeView = TestApplication.view.ShapeView;
     /**
      * @constructor
      * @param {TestApplication.model.ShapeModel} model
+     * @extends {TestApplication.view.ShapeView}
      */
-    TestApplication.view.RectangleView = goog.defineClass(shapeView, {
+    TestApplication.view.RectangleView = goog.defineClass(TestApplication.view.ShapeView, {
         constructor:function(model)
         {
             goog.base(this, model);
@@ -42,6 +42,7 @@ goog.scope(function()
         redraw: function()
         {
             goog.style.setPosition(this._shape,  this.getPosition());
+            this.resize(this.getSize());
         },
 
         /**
@@ -49,6 +50,13 @@ goog.scope(function()
          */
         move: function(pos){
             goog.style.setPosition(this._shape, pos);
+        },
+
+        /**
+         * @inheritDoc
+         */
+        resize: function(size){
+            goog.style.setSize(this._shape, size);
         },
 
         /**

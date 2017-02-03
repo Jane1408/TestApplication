@@ -8,9 +8,12 @@ goog.require("TestApplication.view.EllipseView");
 goog.require("TestApplication.view.RectangleView");
 goog.require("TestApplication.view.TriangleView");
 goog.require("TestApplication.view.Frame");
+goog.require("TestApplication.Constants");
+
 
 goog.scope(function() {
     const SHAPE_TYPE = TestApplication.ShapeType;
+    const CONST = TestApplication.Constants;
     /**
      * @constructor
      */
@@ -19,18 +22,12 @@ goog.scope(function() {
             /** @private {Array<TestApplication.view.ShapeView>} */
             this._shapes = [];
 
-            /**@private {number}*/
-            this._width = TestApplication.view.View.CANVAS_WIDTH;
-
-            /**@private {number}*/
-            this._height = TestApplication.view.View.CANVAS_HEIGHT;
-            
             /** @private {TestApplication.view.Frame} */
             this._frame = new TestApplication.view.Frame();
 
             /** @private {TestApplication.view.ShapeView} */
             this._selectedShape = null; 
-            
+
             this._createBody();
         },
 
@@ -41,10 +38,13 @@ goog.scope(function() {
             /** @private {Element} */
             this._body = goog.dom.createElement(goog.dom.TagName.DIV);
             this._body.setAttribute("class", "canvas");
-            goog.style.setSize(this._body, new goog.math.Size(this._width, this._height));
+            goog.style.setSize(this._body, new goog.math.Size(CONST.CANVAS_WIDTH, CONST.CANVAS_HEIGHT));
             document.body.appendChild(this._body);
         },
-        
+
+        /**
+         * @return number
+         */
         getIndexOfSelectedShape: function()
         {
             if (this._selectedShape != null)
@@ -52,9 +52,11 @@ goog.scope(function() {
                 return this._selectedShape.getIndex();
             }
             return 0;
-            
         },
 
+        /**
+         * @return boolean
+         */
         isShapeSelected: function () {
             return this._selectedShape != null;
         },
@@ -64,51 +66,59 @@ goog.scope(function() {
         },
 
         deselect: function () {
-            this._body.removeChild(this._frame.getObject());
-            this._selectedShape = null;
+            if (this._frame.isActive()) {
+                this._body.removeChild(this._frame.getObject());
+                this._frame.deactivate();
+            }
         },
 
+        /**
+         * @param detail
+         */
         drawShape: function (detail) {
             var shape = detail.shape;
             var type = shape.getType();
             switch (type) {
-                case SHAPE_TYPE.ELLIPSE:
-                {
+                case SHAPE_TYPE.ELLIPSE: {
                     var ellipse = new TestApplication.view.EllipseView(shape);
                     this._addShapeToArray(ellipse);
                     break;
                 }
-                case SHAPE_TYPE.TRIANGLE:
-                {
+                case SHAPE_TYPE.TRIANGLE: {
                     var triangle = new TestApplication.view.TriangleView(shape);
                     this._addShapeToArray(triangle);
                     break;
                 }
-                case SHAPE_TYPE.RECTANGLE:
-                {
+                case SHAPE_TYPE.RECTANGLE: {
                     var rectangle = new TestApplication.view.RectangleView(shape);
                     this._addShapeToArray(rectangle);
                     break;
                 }
                 default:
-                    return;
+                    break;
             }
         },
 
         /**
          * @param {TestApplication.view.ShapeView} shape
+         * @private
          */
         _addShapeToArray: function (shape) {
             this._body.appendChild(shape.getObject());
             this._shapes.push(shape);
         },
 
+        /**
+         * @param detail
+         */
         redrawShape: function (detail) {
-            var shape = this.getShapeByKey(detail.key);
-            shape.redraw();
-            this._frame.setPosition(detail.pos);
+            var shape = this._getShapeByKey(detail.key);
+            if (shape != null) shape.redraw();
         },
 
+        /**
+         * @param detail
+         */
         removeShape: function (detail) {
             var shape = detail.shape;
             for (var i = 0; i != this._shapes.length; ++i) {
@@ -119,20 +129,36 @@ goog.scope(function() {
                 }
             }
             this.deselect();
-            console.log("this._shapes.length = " + this._shapes.length);
         },
 
-        moveShapeView: function (key, pos) {
-            var shape = this.getShapeByKey(key);
-            shape.move(pos);
-            this._frame.setPosition(pos);
+        /**
+         * @param {goog.math.Coordinate} pos
+         */
+        moveShapeView: function (pos) {
+            this._frame.move(pos);
         },
 
+        /**
+         * @param detail
+         */
+        resizeShapeView: function (detail){
+            var clickPos = this._transferMouseCoordinateToCanvasArea(detail.pageX, detail.pageY);
+            this._frame.resize(clickPos);
+        },
+
+        /**
+         * @return {Element}
+         */
         getBody: function () {
             return this._body;
         },
 
-        getShapeByKey: function (key) {
+        /**
+         * @param {number} key
+         * @return {?TestApplication.view.ShapeView}
+         * @private
+         */
+        _getShapeByKey: function (key) {
             for (var i = 0; i != this._shapes.length; ++i) {
                 if (key == this._shapes[i].getIndex()) {
                     return this._shapes[i];
@@ -141,19 +167,27 @@ goog.scope(function() {
             return null;
         },
 
+        /**
+         * @param {number} key
+         */
         selectShape: function (key) {
-            var shape = this.getShapeByKey(key);
-            if (typeof shape != 'undefined') {
+            this.deselect();
+            var shape = this._getShapeByKey(key);
+            if (shape != null) {
                 this._frame.setShape(shape);
                 this.drawFrame();
                 this._selectedShape = shape;
             }
         },
 
-        getShapeIndexByClickPos: function (detail) {
-            var clickPos = new goog.math.Coordinate(detail.pageX, detail.pageY - TestApplication.view.View.TOOLBAR_OFFSET);
-            if (clickPos.y <= TestApplication.view.View.CANVAS_HEIGHT &&
-                clickPos.x <= TestApplication.view.View.CANVAS_WIDTH)
+        /**
+         * @param detail
+         * @return {number}
+         */
+        getShapeIndexByClickPos: function (detail)
+        {
+            var clickPos = this._transferMouseCoordinateToCanvasArea(detail.pageX, detail.pageY);
+            if (clickPos.y <= CONST.CANVAS_HEIGHT && clickPos.x <= CONST.CANVAS_WIDTH)
             {
                 for (var i = this._shapes.length - 1; i >= 0; i--)
                 {
@@ -165,20 +199,40 @@ goog.scope(function() {
             }
             return 0;
         },
-
+        /**
+         * @param detail
+         * @returns {boolean}
+         */
         checkResizePointsOnclick: function(detail)
         {
-            var pos = new goog.math.Coordinate(detail.pageX, detail.pageY - TestApplication.view.View.TOOLBAR_OFFSET);
+            var pos = this._transferMouseCoordinateToCanvasArea(detail.pageX, detail.pageY);
             return (this._frame.isActive() && this._frame.checkPoints(pos));
         },
 
-         statics: {
-            /**@type {number}*/
-            CANVAS_WIDTH: 640,
-            /**@type {number}*/
-            CANVAS_HEIGHT: 480,
-            /**@type {number}*/
-            TOOLBAR_OFFSET: 55,
-        }
+        /**
+         * @return {goog.math.Size}
+         */
+        getFrameSize: function()
+        {
+            return this._frame.getSize();
+        },
+
+        /**
+         * @return {goog.math.Coordinate}
+         */
+        getFramePosition: function()
+        {
+            return this._frame.getPosition();
+        },
+
+        /**
+         * @param {number} xPos
+         * @param {number} yPos
+         * @returns {goog.math.Coordinate}
+         * @private
+         */
+        _transferMouseCoordinateToCanvasArea: function (xPos, yPos) {
+            return (new goog.math.Coordinate(xPos, yPos - CONST.TOOLBAR_HEIGHT));
+        },
     });
 });

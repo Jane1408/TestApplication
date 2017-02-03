@@ -5,15 +5,16 @@ goog.require("goog.style");
 
 goog.scope(function()
 {
-    var shapeView = TestApplication.view.ShapeView;
     /**
      * @constructor
      * @param {TestApplication.model.ShapeModel} model
+     * @extends {TestApplication.view.ShapeView}
      */
-    TestApplication.view.TriangleView = goog.defineClass(shapeView, {
+    TestApplication.view.TriangleView = goog.defineClass(TestApplication.view.ShapeView, {
         constructor:function(model)
         {
             goog.base(this, model);
+            
             this._shape = goog.dom.createElement(goog.dom.TagName.DIV);
             this._shape.setAttribute("class", "triangle-shape");
             goog.style.setPosition(this._shape,  this.getPosition());
@@ -41,6 +42,8 @@ goog.scope(function()
         redraw: function()
         {
             goog.style.setPosition(this._shape,  this.getPosition());
+            this.resize(this.getSize());
+
         },
 
         /**
@@ -53,13 +56,24 @@ goog.scope(function()
         /**
          * @inheritDoc
          */
+        resize: function(size){
+            goog.style.setStyle(this._shape, "border-left", size.width / 2 + "px solid transparent" );
+            goog.style.setStyle(this._shape, "border-right", size.width / 2 + "px solid transparent" );
+            goog.style.setStyle(this._shape, "border-bottom", size.height + "px solid #fff536" );
+
+        },
+
+        /**
+         * @inheritDoc
+         */
         hitTest: function(clickPos) {
             var topLeft = this.getPosition();
             var bottomRight = new goog.math.Coordinate(this.getSize().width + topLeft.x, this.getSize().height + topLeft.y);
-            return (clickPos.y > 2 * (topLeft.y - bottomRight.y) * (clickPos.x - topLeft.x) / (bottomRight.x - topLeft.x) + bottomRight.y
-            && clickPos.y > 2 * (topLeft.y - bottomRight.y) * (clickPos.x - bottomRight.x) / (topLeft.x - bottomRight.x) + bottomRight.y
-            && clickPos.y < bottomRight.y); 
- 
-        }
+            var firstCondition = clickPos.y > (2 * (topLeft.y - bottomRight.y) * (clickPos.x - topLeft.x) / (bottomRight.x - topLeft.x) + bottomRight.y);
+            var secondCondition = clickPos.y > (2 * (topLeft.y - bottomRight.y) * (clickPos.x - bottomRight.x) / (topLeft.x - bottomRight.x) + bottomRight.y);
+            var thirdCondition = clickPos.y < bottomRight.y;
+            return (firstCondition && secondCondition && thirdCondition);
+
+}
     })
 });

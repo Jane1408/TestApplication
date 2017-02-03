@@ -5,12 +5,12 @@ goog.require("goog.style");
 
 goog.scope(function()
 {
-    var shapeView = TestApplication.view.ShapeView;
     /**
      * @constructor
      * @param {TestApplication.model.ShapeModel} model
+     * @extends {TestApplication.view.ShapeView}
      */
-    TestApplication.view.EllipseView = goog.defineClass(shapeView, {
+    TestApplication.view.EllipseView = goog.defineClass(TestApplication.view.ShapeView, {
         constructor:function(model)
         {
             goog.base(this, model);
@@ -43,6 +43,7 @@ goog.scope(function()
         redraw: function()
         {
             goog.style.setPosition(this._shape, this.getPosition());
+            this.resize(this.getSize());
         },
 
         /**
@@ -50,6 +51,16 @@ goog.scope(function()
          */
         move: function(pos){
             goog.style.setPosition(this._shape, pos);
+        },
+
+        /**
+         * @inheritDoc
+         */
+        resize: function(size){
+            goog.style.setSize(this._shape, size);
+            var radius = (size.width > size.height) ? size.width / 2 : size.height / 2;
+            goog.style.setStyle(this._shape, "border-radius", size.width / 2 + "em/" + size.height / 2 +"em");
+
         },
 
         /**
@@ -63,6 +74,5 @@ goog.scope(function()
 
             return (((Math.pow(pointLocalPos.x, 2) / Math.pow(radius.x, 2)) + (Math.pow(pointLocalPos.y, 2) / Math.pow(radius.y, 2))) <= 1);
         }
-        
     })
 });

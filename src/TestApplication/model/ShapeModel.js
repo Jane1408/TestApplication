@@ -1,77 +1,65 @@
 goog.provide("TestApplication.model.ShapeModel");
 
+goog.require("TestApplication.Constants");
 
-goog.scope(function(){
+goog.scope(function() {
+    const CONST = TestApplication.Constants;
     /**
      * @constructor
+     * @param {string} type
      */
     TestApplication.model.ShapeModel = goog.defineClass(null, {
-        constructor: function(type)
-        {
+        constructor: function (type) {
+            /** @private {string}*/
             this._type = type;
-            /**
-             * @type {goog.math.Coordinate}
-             */
-            this._position = new goog.math.Coordinate(0, 0);
-            this._size =new goog.math.Size(TestApplication.model.ShapeModel.SHAPE_WIDTH,
-                TestApplication.model.ShapeModel.SHAPE_HEIGHT);
+            /** @private {goog.math.Coordinate}*/
+            this._position = new goog.math.Coordinate(CONST.SHAPE_START_POSITION_X, CONST.SHAPE_START_POSITION_Y);
+            /** @private {goog.math.Size}*/
+            this._size = new goog.math.Size(CONST.SHAPE_START_WIDTH, CONST.SHAPE_START_HEIGHT);
+            /** @private {number}*/
             this._key = goog.getUid(this);
         },
-        
+
         /**
          * @param {goog.math.Coordinate} position
          */
-        setPosition:function(position)
-        {
+        setPosition: function (position) {
             this._position = position;
         },
-        
+
         /**
          * @param {goog.math.Size} size
          */
-        setSize:function(size)
-        {
+        setSize: function (size) {
             this._size = size;
         },
 
         /**
          * @returns {string}
          */
-        getType:function()
-        {
+        getType: function () {
             return this._type;
         },
 
         /**
          * @returns {goog.math.Coordinate}
          */
-        getPosition:function()
-        {
+        getPosition: function () {
             return this._position;
         },
 
         /**
          * @returns {goog.math.Size}
          */
-        getSize:function()
-        {
+        getSize: function () {
             return this._size;
         },
 
         /**
          * @returns {number}
          */
-        getKey: function()
-        {
+        getKey: function () {
             return this._key;
-        },
-
-        statics:
-        {
-            /* @type {number}*/
-            SHAPE_WIDTH: 100,
-            /* @type {number}*/
-            SHAPE_HEIGHT: 100,
         }
     });
 });

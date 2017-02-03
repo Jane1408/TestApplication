@@ -44,6 +44,12 @@ goog.scope(function()
          * @param {goog.math.Coordinate} pos
          */
         move:function(pos) {},
+
+        /**
+         * @virtual
+         * @param {goog.math.Size} size
+         */
+        resize:function(size) {},
         
         /**
          * @returns {number}

@@ -2,20 +2,17 @@ goog.provide("TestApplication.view.Toolbar");
 
 goog.require("TestApplication.view.Button");
 goog.require("TestApplication.ShapeType");
-goog.require("TestApplication.ButtonType");
+goog.require("TestApplication.ScreenElement");
 goog.require("goog.dom");
 
 goog.scope(function(){
     const SHAPE_TYPE = TestApplication.ShapeType;
-    const BUTTON_TYPE = TestApplication.ButtonType;
-    /*
+    const BUTTON_TYPE = TestApplication.ScreenElement;
+    /**
      * @constructor
-     * @param {document} dispatcher
      */
     TestApplication.view.Toolbar = goog.defineClass(null, {
-        constructor: function (dispatcher) {
-            /** @private {document} */
-            this._dispatcher = dispatcher;
+        constructor: function () {
             /** @private {Array<TestApplication.view.Button>} */
             this._buttons = [];
             this._createToolbar();
@@ -38,11 +35,11 @@ goog.scope(function(){
          * @private
          */
         _createButtons: function () {
-            this._buttons.push(new TestApplication.view.Button(SHAPE_TYPE.ELLIPSE, this._dispatcher));
-            this._buttons.push(new TestApplication.view.Button(SHAPE_TYPE.TRIANGLE, this._dispatcher));
-            this._buttons.push(new TestApplication.view.Button(SHAPE_TYPE.RECTANGLE, this._dispatcher));
-            this._buttons.push(new TestApplication.view.Button(BUTTON_TYPE.UNDO, this._dispatcher));
-            this._buttons.push(new TestApplication.view.Button(BUTTON_TYPE.REDO, this._dispatcher));
+            this._buttons.push(new TestApplication.view.Button(SHAPE_TYPE.ELLIPSE));
+            this._buttons.push(new TestApplication.view.Button(SHAPE_TYPE.TRIANGLE));
+            this._buttons.push(new TestApplication.view.Button(SHAPE_TYPE.RECTANGLE));
+            this._buttons.push(new TestApplication.view.Button(BUTTON_TYPE.UNDO));
+            this._buttons.push(new TestApplication.view.Button(BUTTON_TYPE.REDO));
         },
         
         /**
@@ -52,7 +49,7 @@ goog.scope(function(){
         {
             for (var i = 0; i < this._buttons.length; i++)
             {
-                this._toolbar.appendChild(this._buttons[i].getButton());
+                this._toolbar.appendChild(this._buttons[i].getObject());
             }
         }
     });

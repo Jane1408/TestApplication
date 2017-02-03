@@ -1,17 +1,17 @@
-goog.provide("TestApplication.commands.MoveShapeCommand");
+goog.provide("TestApplication.commands.ResizeShapeCommand");
 
 goog.require("TestApplication.commands.ICommand");
-goog.require("goog.math");
 
 goog.scope(function() {
     /**
      * @constructor
      * @param {TestApplication.model.ShapeModel} shape
      * @param {goog.math.Coordinate} pos
+     * @param {goog.math.Size} size
      * @extends {TestApplication.commands.ICommand}
      */
-    TestApplication.commands.MoveShapeCommand = goog.defineClass(TestApplication.commands.ICommand, {
-        constructor: function (shape, pos) {
+    TestApplication.commands.ResizeShapeCommand = goog.defineClass(TestApplication.commands.ICommand, {
+        constructor: function (shape, pos, size) {
             this._dispatcher = document;
 
             /**@private {TestApplication.model.ShapeModel}*/
@@ -23,6 +23,11 @@ goog.scope(function() {
             /**@private {goog.math.Coordinate}*/
             this._newPos = pos;
 
+            /**@private {goog.math.Size}*/
+            this._oldSize = shape.getSize();
+
+            /**@private {goog.math.Size}*/
+            this._newSize = size;
         },
 
         /**
@@ -30,6 +35,7 @@ goog.scope(function() {
          */
         execute: function () {
             this._shape.setPosition(this._newPos);
+            this._shape.setSize(this._newSize);
             var event = new CustomEvent(TestApplication.EventType.UPDATE_SHAPE, {
                 "detail": {
                     "key": this._shape.getKey(),
@@ -43,6 +49,7 @@ goog.scope(function() {
          */
         unExecute: function () {
             this._shape.setPosition(this._oldPos);
+            this._shape.setSize(this._oldSize);
             var event = new CustomEvent(TestApplication.EventType.UPDATE_SHAPE, {
                 "detail": {
                     "key": this._shape.getKey(),
