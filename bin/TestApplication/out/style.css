@@ -74,4 +74,12 @@
   height: 0;
   border-left: 50px solid transparent;
   border-right: 50px solid transparent;
-  border-bottom: 100px solid #ffff00; }
+  border-bottom: 100px solid #ffaa00; }
+
+.triangle-interior {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-left: 52px solid transparent;
+  border-right: 52px solid transparent;
+  border-bottom: 102px solid #ffff00; }

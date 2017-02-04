@@ -9,9 +9,11 @@ goog.require("TestApplication.view.RectangleView");
 goog.require("TestApplication.view.TriangleView");
 goog.require("TestApplication.view.Frame");
 goog.require("TestApplication.Constants");
+goog.require("TestApplication.ScreenElement");
 
 
 goog.scope(function() {
+    const SCREEN_ELEMENT = TestApplication.ScreenElement;
     const SHAPE_TYPE = TestApplication.ShapeType;
     const CONST = TestApplication.Constants;
     /**
@@ -37,7 +39,7 @@ goog.scope(function() {
         _createBody: function () {
             /** @private {Element} */
             this._body = goog.dom.createElement(goog.dom.TagName.DIV);
-            this._body.setAttribute("class", "canvas");
+            this._body.setAttribute("class", SCREEN_ELEMENT.CANVAS);
             goog.style.setSize(this._body, new goog.math.Size(CONST.CANVAS_WIDTH, CONST.CANVAS_HEIGHT));
             document.body.appendChild(this._body);
         },

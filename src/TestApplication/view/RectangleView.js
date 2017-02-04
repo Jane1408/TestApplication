@@ -43,6 +43,7 @@ goog.scope(function()
         {
             goog.style.setPosition(this._shape,  this.getPosition());
             this.resize(this.getSize());
+        //    console.log("frame pos: " , shape.getPosition());
         },
 
         /**

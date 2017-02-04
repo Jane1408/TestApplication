@@ -14,7 +14,6 @@ goog.require("TestApplication.Constants");
 goog.scope(function() {
     const SCREEN_ELEMENT = TestApplication.ScreenElement;
     const CONST = TestApplication.Constants;
-
     /**
      * @constructor
      */
@@ -106,7 +105,7 @@ goog.scope(function() {
                 document.onmouseup = goog.bind(function () {
                     document.onmousemove = null;
                     document.onmouseup = null;
-                    if (pos.x != shapeModel.getPosition().x && pos.y != shapeModel.getPosition().y) {
+                    if (pos.x != shapeModel.getPosition().x || pos.y != shapeModel.getPosition().y) {
                         this._moveShape(shapeModel, pos);
                     }
                     goog.style.setStyle(document.documentElement, "cursor", "default");

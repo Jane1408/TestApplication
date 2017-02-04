@@ -18,6 +18,16 @@ goog.scope(function()
             this._shape = goog.dom.createElement(goog.dom.TagName.DIV);
             this._shape.setAttribute("class", "triangle-shape");
             goog.style.setPosition(this._shape,  this.getPosition());
+            this._createInteriorShape();
+        },
+        
+        _createInteriorShape: function()
+        {
+            /** @private {Element}*/
+            this._interior = goog.dom.createElement(goog.dom.TagName.DIV);
+            this._interior.setAttribute("class", "triangle-interior");
+            this._shape.appendChild(this._interior);
+            this.resize(this.getSize());
         },
         
         /**
@@ -59,7 +69,12 @@ goog.scope(function()
         resize: function(size){
             goog.style.setStyle(this._shape, "border-left", size.width / 2 + "px solid transparent" );
             goog.style.setStyle(this._shape, "border-right", size.width / 2 + "px solid transparent" );
-            goog.style.setStyle(this._shape, "border-bottom", size.height + "px solid #fff536" );
+            goog.style.setStyle(this._shape, "border-bottom", size.height + "px solid #ffaa00" );
+
+            goog.style.setStyle(this._interior, "border-left", size.width / 2 - 4  + "px solid transparent" );
+            goog.style.setStyle(this._interior, "border-right", size.width / 2  - 4 + "px solid transparent" );
+            goog.style.setStyle(this._interior, "border-bottom", size.height - 8 + "px solid #ffff00" );
+            goog.style.setPosition(this._interior, new goog.math.Coordinate(- size.width / 2 + 4, 6));
 
         },
 
