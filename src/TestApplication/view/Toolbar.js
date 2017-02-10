@@ -7,7 +7,7 @@ goog.require("goog.dom");
 
 goog.scope(function(){
     const SHAPE_TYPE = TestApplication.ShapeType;
-    const BUTTON_TYPE = TestApplication.ScreenElement;
+    const SCREEN_ELEMENT = TestApplication.ScreenElement;
     /**
      * @constructor
      */
@@ -18,6 +18,7 @@ goog.scope(function(){
             this._createToolbar();
             this._createButtons();
             this._appendButtons();
+            
         },
         
         /**
@@ -27,7 +28,7 @@ goog.scope(function(){
         {
             /** @private {Element} */
             this._toolbar = goog.dom.createElement(goog.dom.TagName.DIV);
-            this._toolbar.setAttribute("class", BUTTON_TYPE.TOOLBAR);
+            this._toolbar.setAttribute("class", SCREEN_ELEMENT.TOOLBAR);
             document.body.appendChild(this._toolbar);
         },
         
@@ -38,8 +39,11 @@ goog.scope(function(){
             this._buttons.push(new TestApplication.view.Button(SHAPE_TYPE.ELLIPSE));
             this._buttons.push(new TestApplication.view.Button(SHAPE_TYPE.TRIANGLE));
             this._buttons.push(new TestApplication.view.Button(SHAPE_TYPE.RECTANGLE));
-            this._buttons.push(new TestApplication.view.Button(BUTTON_TYPE.UNDO));
-            this._buttons.push(new TestApplication.view.Button(BUTTON_TYPE.REDO));
+            this._buttons.push(new TestApplication.view.Button(SCREEN_ELEMENT.UNDO));
+            this._buttons.push(new TestApplication.view.Button(SCREEN_ELEMENT.REDO));
+            this._buttons.push(new TestApplication.view.Button(SCREEN_ELEMENT.OPEN));
+            this._buttons.push(new TestApplication.view.Button(SCREEN_ELEMENT.NEW));
+            this._buttons.push(new TestApplication.view.Button(SCREEN_ELEMENT.SAVE));
         },
         
         /**

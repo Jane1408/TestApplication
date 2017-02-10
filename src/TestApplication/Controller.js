@@ -4,6 +4,7 @@ goog.require("TestApplication.view.View");
 goog.require("TestApplication.view.Toolbar");
 goog.require("TestApplication.model.Model");
 goog.require("TestApplication.History");
+goog.require("TestApplication.FileWorker");
 goog.require("TestApplication.commands.AddShapeCommand");
 goog.require("TestApplication.commands.MoveShapeCommand");
 goog.require("TestApplication.commands.ResizeShapeCommand");
@@ -28,6 +29,8 @@ goog.scope(function() {
             this._history = new TestApplication.History();
             /**@private {TestApplication.view.View}*/
             this._view = new TestApplication.view.View();
+            /**@private {TestApplication.fileWorker}*/
+            this._fileWorker = new TestApplication.FileWorker();
 
             this._addToolbarActionListen();
             this._addShapeAddedListen();
@@ -35,6 +38,8 @@ goog.scope(function() {
             this._addRedrawShapeListen();
             this._addDeleteClickListen();
             this._addRemoveShapeListen();
+
+            
         },
 
         /**
@@ -47,6 +52,12 @@ goog.scope(function() {
                 }
                 else if (e.detail.id == SCREEN_ELEMENT.REDO) {
                     this._redo();
+                }
+                else if (e.detail.id == SCREEN_ELEMENT.OPEN) {
+                    this._fileWorker.clickFileReader();
+                }
+                else if (e.detail.id == SCREEN_ELEMENT.SAVE) {
+                    this._fileWorker.saveToFile(this._model.getData());
                 }
                 else {
                     this._addShape(e.detail.id);
@@ -221,6 +232,10 @@ goog.scope(function() {
         _redo: function () {
             this._view.deselect();
             this._history.redo();
-        }
+        },
+
+        
+
+        
     });
 });

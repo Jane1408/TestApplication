@@ -40,6 +40,10 @@ goog.scope(function() {
                 }
             }
             return null;
-        }
+        },
+        
+        getData: function(){
+            return this._data;
+        },
     })
 });

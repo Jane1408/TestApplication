@@ -75,7 +75,6 @@ goog.scope(function()
             goog.style.setStyle(this._interior, "border-right", size.width / 2  - 4 + "px solid transparent" );
             goog.style.setStyle(this._interior, "border-bottom", size.height - 8 + "px solid #ffff00" );
             goog.style.setPosition(this._interior, new goog.math.Coordinate(- size.width / 2 + 4, 6));
-
         },
 
         /**
@@ -88,7 +87,6 @@ goog.scope(function()
             var secondCondition = clickPos.y > (2 * (topLeft.y - bottomRight.y) * (clickPos.x - bottomRight.x) / (topLeft.x - bottomRight.x) + bottomRight.y);
             var thirdCondition = clickPos.y < bottomRight.y;
             return (firstCondition && secondCondition && thirdCondition);
-
-}
+        }
     })
 });

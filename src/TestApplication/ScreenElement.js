@@ -7,5 +7,8 @@ TestApplication.ScreenElement = {
     UNDO: "undo",
     REDO: "redo",
     TOOLBAR: "toolbar",
-    CANVAS: "canvas"
+    CANVAS: "canvas",
+    OPEN: "open",
+    SAVE: "save",
+    NEW: "new",
 };
