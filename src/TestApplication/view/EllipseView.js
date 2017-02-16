@@ -16,17 +16,9 @@ goog.scope(function()
             goog.base(this, model);
             this._shape = goog.dom.createElement(goog.dom.TagName.DIV);
             this._shape.setAttribute("class", "shape");
-            goog.style.setStyle(this._shape, "border-radius", (this.getSize().width / 2) + "px");
+            goog.style.setStyle(this._shape, "border-radius",  this.getSize().width / 2 + "em/" + this.getSize().height / 2 +"em");
             goog.style.setPosition(this._shape,  this.getPosition());
             goog.style.setSize(this._shape, this.getSize());
-        },
-
-        /**
-         * @inheritDoc
-         */
-        getIndex: function()
-        {
-            return this.getKey();
         },
 
         /**
@@ -73,6 +65,6 @@ goog.scope(function()
             var pointLocalPos = new goog.math.Coordinate(clickPos.x - origin.x, clickPos.y - origin.y);
 
             return (((Math.pow(pointLocalPos.x, 2) / Math.pow(radius.x, 2)) + (Math.pow(pointLocalPos.y, 2) / Math.pow(radius.y, 2))) <= 1);
-        }
+        },
     })
 });

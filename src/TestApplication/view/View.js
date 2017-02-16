@@ -21,14 +21,14 @@ goog.scope(function() {
      */
     TestApplication.view.View = goog.defineClass(null, {
         constructor: function () {
-            /** @private {Array<TestApplication.view.ShapeView>} */
+            /** @private {Array<TestApplication.view.ShapeView>}*/
             this._shapes = [];
 
             /** @private {TestApplication.view.Frame} */
             this._frame = new TestApplication.view.Frame();
 
             /** @private {TestApplication.view.ShapeView} */
-            this._selectedShape = null; 
+            this._selectedShape = null;
 
             this._createBody();
         },
@@ -47,11 +47,9 @@ goog.scope(function() {
         /**
          * @return number
          */
-        getIndexOfSelectedShape: function()
-        {
-            if (this._selectedShape != null)
-            {
-                return this._selectedShape.getIndex();
+        getIndexOfSelectedShape: function () {
+            if (this._selectedShape != null) {
+                return this._selectedShape.getKey();
             }
             return 0;
         },
@@ -71,28 +69,39 @@ goog.scope(function() {
             if (this._frame.isActive()) {
                 this._body.removeChild(this._frame.getObject());
                 this._frame.deactivate();
+                this._selectedShape = null;
             }
         },
 
+        clearScreen: function () {
+            this.deselect();
+            for (var i = 0; i != this._shapes.length; ++i) {
+                this._body.removeChild(this._shapes[i].getObject());
+            }
+            this._shapes.splice(0, this._shapes.length);
+        },
+
         /**
-         * @param detail
+         * @param {TestApplication.model.ShapeModel} model
          */
-        drawShape: function (detail) {
-            var shape = detail.shape;
-            var type = shape.getType();
+        drawShape: function (model) {
+            var type = model.getType();
             switch (type) {
-                case SHAPE_TYPE.ELLIPSE: {
-                    var ellipse = new TestApplication.view.EllipseView(shape);
+                case SHAPE_TYPE.ELLIPSE:
+                {
+                    var ellipse = new TestApplication.view.EllipseView(model);
                     this._addShapeToArray(ellipse);
                     break;
                 }
-                case SHAPE_TYPE.TRIANGLE: {
-                    var triangle = new TestApplication.view.TriangleView(shape);
+                case SHAPE_TYPE.TRIANGLE:
+                {
+                    var triangle = new TestApplication.view.TriangleView(model);
                     this._addShapeToArray(triangle);
                     break;
                 }
-                case SHAPE_TYPE.RECTANGLE: {
-                    var rectangle = new TestApplication.view.RectangleView(shape);
+                case SHAPE_TYPE.RECTANGLE:
+                {
+                    var rectangle = new TestApplication.view.RectangleView(model);
                     this._addShapeToArray(rectangle);
                     break;
                 }
@@ -106,8 +115,19 @@ goog.scope(function() {
          * @private
          */
         _addShapeToArray: function (shape) {
-            this._body.appendChild(shape.getObject());
-            this._shapes.push(shape);
+            if (shape.getLayerId() != -1) {
+                for (var i = shape.getLayerId(); i < this._shapes.length; i++) {
+                    this._body.removeChild(this._shapes[i].getObject());
+                }
+                goog.array.insertAt(this._shapes, shape, shape.getLayerId());
+                for (var j = shape.getLayerId(); j < this._shapes.length; j++) {
+                    this._body.appendChild(this._shapes[j].getObject());
+                }
+            }
+            else {
+                goog.array.insert(this._shapes, shape);
+                this._body.appendChild(shape.getObject());
+            }
         },
 
         /**
@@ -124,7 +144,7 @@ goog.scope(function() {
         removeShape: function (detail) {
             var shape = detail.shape;
             for (var i = 0; i != this._shapes.length; ++i) {
-                if (shape.getKey() == this._shapes[i].getIndex()) {
+                if (shape.getKey() == this._shapes[i].getKey()) {
                     this._body.removeChild(this._shapes[i].getObject());
                     this._shapes.splice(i--, 1);
                     break;
@@ -143,7 +163,7 @@ goog.scope(function() {
         /**
          * @param detail
          */
-        resizeShapeView: function (detail){
+        resizeShapeView: function (detail) {
             var clickPos = this._transferMouseCoordinateToCanvasArea(detail.pageX, detail.pageY);
             this._frame.resize(clickPos);
         },
@@ -162,7 +182,7 @@ goog.scope(function() {
          */
         _getShapeByKey: function (key) {
             for (var i = 0; i != this._shapes.length; ++i) {
-                if (key == this._shapes[i].getIndex()) {
+                if (key == this._shapes[i].getKey()) {
                     return this._shapes[i];
                 }
             }
@@ -186,16 +206,12 @@ goog.scope(function() {
          * @param detail
          * @return {number}
          */
-        getShapeIndexByClickPos: function (detail)
-        {
+        getShapeKeyByClickPos: function (detail) {
             var clickPos = this._transferMouseCoordinateToCanvasArea(detail.pageX, detail.pageY);
-            if (clickPos.y <= CONST.CANVAS_HEIGHT && clickPos.x <= CONST.CANVAS_WIDTH)
-            {
-                for (var i = this._shapes.length - 1; i >= 0; i--)
-                {
-                    if(this._shapes[i].hitTest(clickPos))
-                    {
-                        return this._shapes[i].getIndex();
+            if (clickPos.y <= CONST.CANVAS_HEIGHT && clickPos.x <= CONST.CANVAS_WIDTH) {
+                for (var i = this._shapes.length - 1; i >= 0; i--) {
+                    if (this._shapes[i].hitTest(clickPos)) {
+                        return this._shapes[i].getKey();
                     }
                 }
             }
@@ -205,8 +221,7 @@ goog.scope(function() {
          * @param detail
          * @returns {boolean}
          */
-        checkResizePointsOnclick: function(detail)
-        {
+        checkResizePointsOnclick: function (detail) {
             var pos = this._transferMouseCoordinateToCanvasArea(detail.pageX, detail.pageY);
             return (this._frame.isActive() && this._frame.checkPoints(pos));
         },
@@ -214,16 +229,14 @@ goog.scope(function() {
         /**
          * @return {goog.math.Size}
          */
-        getFrameSize: function()
-        {
+        getFrameSize: function () {
             return this._frame.getSize();
         },
 
         /**
          * @return {goog.math.Coordinate}
          */
-        getFramePosition: function()
-        {
+        getFramePosition: function () {
             return this._frame.getPosition();
         },
 

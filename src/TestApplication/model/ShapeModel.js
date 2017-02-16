@@ -18,6 +18,9 @@ goog.scope(function() {
             this._size = new goog.math.Size(CONST.SHAPE_START_WIDTH, CONST.SHAPE_START_HEIGHT);
             /** @private {number}*/
             this._key = goog.getUid(this);
+            /** @private {number}*/
+            this._layerId = -1;
+
         },
 
         /**
@@ -32,6 +35,13 @@ goog.scope(function() {
          */
         setSize: function (size) {
             this._size = size;
+        },
+
+        /**
+         * @param {number} id
+         */
+        setLayerId: function (id) {
+            this._layerId = id;
         },
 
         /**
@@ -60,6 +70,13 @@ goog.scope(function() {
          */
         getKey: function () {
             return this._key;
+        },
+        /**
+         * @returns {number}
+         */
+        getLayerId: function () {
+            return this._layerId;
         }
+
     });
 });

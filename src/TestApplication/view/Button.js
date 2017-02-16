@@ -44,6 +44,6 @@ goog.scope(function() {
          */
         getObject: function () {
             return this._button;
-        }
+        },
     });
 });

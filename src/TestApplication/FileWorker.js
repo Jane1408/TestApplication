@@ -1,14 +1,16 @@
 goog.provide("TestApplication.FileWorker");
 
+goog.require("TestApplication.model.ShapeModel");
+
 goog.scope(function () {
     /**
      * @constructor
      */
     TestApplication.FileWorker = goog.defineClass(null, {
         constructor: function () {
+            this._dispatcher = document;
             this._createFileReader();
             this._addChangeListen();
-
         },
 
         /**
@@ -46,28 +48,22 @@ goog.scope(function () {
                 }
                 var reader = new FileReader();
                 reader.onload = goog.bind(function (event) {
-                    var url = event.target.result;
-                    console.log(url);
+                    var data = event.target.result;
+                    this._readJSON(data);
                 }, this);
                 reader.readAsText(file);
             }
             event.target.value = "";
         },
 
+        /**
+         * @param{Array<TestApplication.model.ShapeModel>} data
+         */
         saveToFile: function (data) {
-            var shapeArr = [];
-            for (var i = 0; i < data.length; i++)
-            {
-                var type = data[i].getType();
-                var position = data[i].getPosition();
-                var size = data[i].getSize();
-                shapeArr.push({"type": type, "position": [position.x , position.y], "size": [size.width, size.height]});
-            }
-            var dataArr = [{"shapes" : shapeArr}];
-            var json = JSON.stringify(dataArr);
+            var json = this._writeJSON(data);
 
             var textFileAsBlob = new Blob([json], {type: 'text/plain'});
-            var fileNameToSaveAs = "new.json";
+            var fileNameToSaveAs = "new.txt";
 
             var downloadLink = document.createElement("a");
             downloadLink.download = fileNameToSaveAs;
@@ -82,6 +78,48 @@ goog.scope(function () {
             function destroyClickedElement(event) {
                 document.body.removeChild(event.target);
             }
-        }
+        },
+
+        /**
+         * @private
+         * @param{Array<TestApplication.model.ShapeModel>} data
+         * @return {string}
+         */
+        _writeJSON: function (data) {
+            var shapeArr = [];
+            for (var i = 0; i < data.length; i++) {
+                var type = data[i].getType();
+                var position = data[i].getPosition();
+                var size = data[i].getSize();
+                shapeArr.push({"type": type, "position": [position.x, position.y], "size": [size.width, size.height]});
+            }
+            var dataArr = [{"shapes": shapeArr}];
+            return JSON.stringify(dataArr);
+        },
+
+        /**
+         * @private
+         * @param {string} json
+         */
+        _readJSON: function (json) {
+            var data = JSON.parse(json);
+            var shapeModels = [];
+            for (var i = 0; i < data[0].shapes.length; i++) {
+                var pos = new goog.math.Coordinate(data[0].shapes[i].position[0], data[0].shapes[i].position[1]);
+                var size = new goog.math.Size(data[0].shapes[i].size[0], data[0].shapes[i].size[1]);
+                var shape = new TestApplication.model.ShapeModel(data[0].shapes[i].type);
+                shape.setPosition(pos);
+                shape.setSize(size);
+                shapeModels.push(shape);
+            }
+
+            var event = new CustomEvent(TestApplication.EventType.ADD_DATA_FROM_FILE, {
+                "detail": {
+                    "shapes": shapeModels
+                }
+            });
+            this._dispatcher.dispatchEvent(event);
+        },
+
     })
 });

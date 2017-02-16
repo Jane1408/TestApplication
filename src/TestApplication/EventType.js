@@ -13,4 +13,6 @@ goog.provide("TestApplication.EventType");
         UPDATE_SHAPE: "updateShape",
         REMOVE_SHAPE: "removeShape",
         ACTION: "action",
+        CLEAR_SCREEN: "clearScreen",
+        ADD_DATA_FROM_FILE: "addDataFromFile"
     };

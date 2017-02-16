@@ -14,15 +14,21 @@ goog.scope(function() {
          * @param {TestApplication.model.ShapeModel} shape
          */
         addShape: function (shape) {
-            goog.array.insert(this._data, shape);
+            if (shape.getLayerId() != -1){
+                goog.array.insertAt(this._data, shape, shape.getLayerId());
+            }
+            else{
+                goog.array.insert(this._data, shape);
+            }
         },
 
         /**
          * @param {TestApplication.model.ShapeModel} shape
          */
         removeShape: function (shape) {
-            for (var i = 0; i != this._data.length; ++i) {
+           for (var i = 0; i != this._data.length; ++i) {
                 if (shape == this._data[i]) {
+                    shape.setLayerId(i);
                     this._data.splice(i--, 1);
                     break;
                 }
@@ -41,9 +47,17 @@ goog.scope(function() {
             }
             return null;
         },
-        
+
+        /**
+         * @return {Array<TestApplication.model.ShapeModel>}
+         */
         getData: function(){
             return this._data;
         },
+        
+        removeData: function(){
+            goog.array.clear(this._data);
+        },
+
     })
 });

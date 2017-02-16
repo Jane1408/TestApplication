@@ -197,11 +197,11 @@ goog.scope(function() {
                 default:
                     return;
             }
-            newPos = this._calculateCorrectShapePositionForResizing(newPos);
-            newSize = this._calculateCorrectSize(newSize, newPos);
-            this.move(newPos);
-            this._setSize(newSize);
-            this._shape.resize(newSize);
+            this._position = this._calculateCorrectShapePositionForResizing(newPos);
+            this._size = this._calculateCorrectSize(newSize, this._position);
+            this.move(this._position);
+            this._setSize(this._size);
+            this._shape.resize(this._size);
         },
 
         /**
@@ -271,16 +271,14 @@ goog.scope(function() {
          * @return {goog.math.Size}
          */
         getSize: function () {
-            var frameSize = goog.style.getSize(this._frame);
-            var size = new goog.math.Size(frameSize.width - CONST.RESIZE_POINT_RADIUS, frameSize.height - CONST.RESIZE_POINT_RADIUS);
-            return size;
+            return this._size;
         },
 
         /**
          * @return {goog.math.Coordinate}
          */
         getPosition: function () {
-            return goog.style.getPosition(this._frame);
+            return this._position;
         },
     })
 });

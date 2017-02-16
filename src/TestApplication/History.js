@@ -28,6 +28,14 @@ goog.scope(function() {
         /**
          * @public
          */
+        clearHistory: function(){
+            this._commands = [];
+            this._currentCommand = 0;
+        },
+
+        /**
+         * @public
+         */
         undo: function () {
             if (this._currentCommand > 0 && (this._commands.length != 0)) {
                 this._commands[--this._currentCommand].unExecute();

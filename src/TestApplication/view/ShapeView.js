@@ -16,12 +16,6 @@ goog.scope(function()
 
         /**
          * @virtual
-         * @returns {number}
-         */
-        getIndex:function() {},
-
-        /**
-         * @virtual
          * @param {goog.math.Coordinate} clickPos
          * @returns {boolean}
          */
@@ -37,7 +31,6 @@ goog.scope(function()
          * @virtual
          */
         redraw:function() {},
-
 
         /**
          * @virtual
@@ -73,6 +66,14 @@ goog.scope(function()
         getSize: function()
         {
             return this._model.getSize();
+        },
+
+        /**
+         * @returns {number}
+         */
+        getLayerId: function()
+        {
+            return this._model.getLayerId();
         },
 
     })

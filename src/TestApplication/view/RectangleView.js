@@ -19,14 +19,6 @@ goog.scope(function()
             goog.style.setPosition(this._shape,  this.getPosition());
             goog.style.setSize(this._shape, this.getSize());
         },
-        
-        /**
-         * @inheritDoc
-         */
-        getIndex: function()
-        {
-            return this.getKey();
-        },
 
         /**
          * @inheritDoc
@@ -68,6 +60,6 @@ goog.scope(function()
             var size = this.getSize();
             return ((shapePos.x <= clickPos.x && clickPos.x <=  shapePos.x + size.width) &&
                 (shapePos.y <= clickPos.y && clickPos.y <=  shapePos.y + size.height));
-        }
+        },
     })
 });

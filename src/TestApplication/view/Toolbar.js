@@ -55,6 +55,6 @@ goog.scope(function(){
             {
                 this._toolbar.appendChild(this._buttons[i].getObject());
             }
-        }
+        },
     });
 });
