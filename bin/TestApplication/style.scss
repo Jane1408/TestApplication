@@ -70,12 +70,27 @@
   border: 2px solid #FF0000;
 }
 
-.frame-point {
+.frame .point {
   position: inherit;
   width: 10px;
   height: 10px;
   border-radius: 5px;
   background-color: #FF0000;
+}
+
+.frame {
+  .nw {
+    cursor: nw-resize;
+  }
+  .ne {
+    cursor: ne-resize;
+  }
+  .sw {
+    cursor: sw-resize;
+  }
+  .se {
+    cursor: se-resize;
+  }
 }
 
 .triangle-shape {

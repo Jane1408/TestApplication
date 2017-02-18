@@ -1,17 +1,20 @@
 goog.provide("TestApplication.view.Button");
 
-goog.require("TestApplication.EventType");
 goog.require("goog.dom");
 
 goog.scope(function() {
     /**
      * @constructor
+     * @param {string} id
+     * @param {string} eventType
      */
     TestApplication.view.Button = goog.defineClass(null, {
-        constructor: function (id) {
+        constructor: function (id, eventType) {
             this._dispatcher = document;
             /** @private {string} */
             this._id = id;
+            /** @private {string}*/
+            this._eventType = eventType;
             this._createButton();
             this._button.addEventListener("click", goog.bind(this._buttonClicked, this));
             goog.style.setStyle(this._button, "cursor", "pointer");
@@ -31,7 +34,7 @@ goog.scope(function() {
          * @private
          */
         _buttonClicked: function () {
-            var event = new CustomEvent(TestApplication.EventType.ACTION, {
+            var event = new CustomEvent(this._eventType, {
                 "detail": {
                     "id": this._id
                 }

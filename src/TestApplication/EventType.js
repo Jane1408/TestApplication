@@ -7,12 +7,14 @@ goog.provide("TestApplication.EventType");
         UNDO: "undo",
         REDO: "redo",
         ADD_SHAPE: "addShape",
-        SHAPE_ADDED: "shapeAdded",
+        DRAW_SHAPE: "drawShape",
         SHAPE_REMOVED: "shapeRemoved",
         SHAPE_MOVE: "shapeMove",
         UPDATE_SHAPE: "updateShape",
         REMOVE_SHAPE: "removeShape",
-        ACTION: "action",
         CLEAR_SCREEN: "clearScreen",
+        OPEN_FILE: "openFile",
+        CREATE_NEW: "createNew",
+        SAVE_TO_FILE: "saveToFile",
         ADD_DATA_FROM_FILE: "addDataFromFile"
     };

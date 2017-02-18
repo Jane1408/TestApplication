@@ -226,10 +226,12 @@ goog.scope(function() {
          * @private
          */
         _createResizePoints: function () {
-            for (var i = 0; i < 4; ++i) {
-                var point = new TestApplication.view.ResizePoint();
-                this._frame.appendChild(point.getObject());
-                this._points.push(point);
+            this._points.push(new TestApplication.view.ResizePoint("nw"));
+            this._points.push(new TestApplication.view.ResizePoint("ne"));
+            this._points.push(new TestApplication.view.ResizePoint("se"));
+            this._points.push(new TestApplication.view.ResizePoint("sw"));
+            for (var i = 0; i < this._points.length; ++i) {
+                this._frame.appendChild(this._points[i].getObject());
             }
         },
 

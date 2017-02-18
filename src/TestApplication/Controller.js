@@ -9,12 +9,11 @@ goog.require("TestApplication.commands.AddShapeCommand");
 goog.require("TestApplication.commands.MoveShapeCommand");
 goog.require("TestApplication.commands.ResizeShapeCommand");
 goog.require("TestApplication.commands.RemoveShapeCommand");
-goog.require("TestApplication.ScreenElement");
 goog.require("TestApplication.Constants");
 
 goog.scope(function() {
-    const SCREEN_ELEMENT = TestApplication.ScreenElement;
-    const CONST = TestApplication.Constants;
+    const Constants = TestApplication.Constants;
+    const EventType = TestApplication.EventType;
     /**
      * @constructor
      */
@@ -32,47 +31,81 @@ goog.scope(function() {
             /**@private {TestApplication.FileWorker}*/
             this._fileWorker = new TestApplication.FileWorker();
 
-            this._addToolbarActionListen();
-            this._addShapeAddedListen();
-            this._addShapeMoveAndResizeListen();
-            this._addRedrawShapeListen();
-            this._addDeleteClickListen();
-            this._addRemoveShapeListen();
-            this._addClearScreenListen();
+            this._addShapeListen();
+            this._undoListen();
+            this._redoListen();
+            this._createNewListen();
+            this._openFileListen();
+            this._saveToFileListen();
+
+            this._ShapeAddedListen();
+            this._ShapeMoveAndResizeListen();
+            this._RedrawShapeListen();
+            this._DeleteClickListen();
+            this._RemoveShapeListen();
             this._addShapesFromFileListen();
         },
 
         /**
          * @private
          */
-        _addToolbarActionListen: function () {
-            this._dispatcher.addEventListener(TestApplication.EventType.ACTION, goog.bind(function (e) {
-                if (e.detail.id == SCREEN_ELEMENT.UNDO) {
-                    this._undo();
-                }
-                else if (e.detail.id == SCREEN_ELEMENT.REDO) {
-                    this._redo();
-                }
-                else if (e.detail.id == SCREEN_ELEMENT.NEW) {
-                    this._createNew();
-                }
-                else if (e.detail.id == SCREEN_ELEMENT.OPEN) {
-                    this._fileWorker.clickFileReader();
-                }
-                else if (e.detail.id == SCREEN_ELEMENT.SAVE) {
-                    this._fileWorker.saveToFile(this._model.getData());
-                }
-                else {
-                    this._addShape(e.detail.id);
-                }
+        _addShapeListen: function(){
+            this._dispatcher.addEventListener(EventType.ADD_SHAPE, goog.bind(function (e) {
+                this._addShape(e.detail.id);
             }, this), false);
         },
 
         /**
          * @private
          */
-        _addShapeAddedListen: function () {
-            this._dispatcher.addEventListener(TestApplication.EventType.SHAPE_ADDED, goog.bind(function (e) {
+        _undoListen: function(){
+            this._dispatcher.addEventListener(EventType.UNDO, goog.bind(function () {
+                this._undo();
+            }, this), false);
+        },
+
+        /**
+         * @private
+         */
+        _redoListen: function(){
+            this._dispatcher.addEventListener(EventType.REDO, goog.bind(function () {
+                this._redo();
+            }, this), false);
+        },
+
+        /**
+         * @private
+         */
+        _createNewListen: function(){
+            this._dispatcher.addEventListener(EventType.CREATE_NEW, goog.bind(function () {
+                this._createNew();
+            }, this), false);
+        },
+
+        /**
+         * @private
+         */
+        _openFileListen: function(){
+            this._dispatcher.addEventListener(EventType.OPEN_FILE, goog.bind(function () {
+                this._fileWorker.clickFileReader();
+            }, this), false);
+        },
+
+        /**
+         * @private
+         */
+        _saveToFileListen: function(){
+            this._dispatcher.addEventListener(EventType.SAVE_TO_FILE, goog.bind(function () {
+                this._fileWorker.saveToFile(this._model.getData());
+            }, this), false);
+        },
+
+
+        /**
+         * @private
+         */
+        _ShapeAddedListen: function () {
+            this._dispatcher.addEventListener(EventType.DRAW_SHAPE, goog.bind(function (e) {
                 var model = e.detail.shape;
                 this._view.drawShape(model);
             }, this), false);
@@ -82,21 +115,16 @@ goog.scope(function() {
          * @private
          */
         _addShapesFromFileListen: function () {
-            this._dispatcher.addEventListener(TestApplication.EventType.ADD_DATA_FROM_FILE, goog.bind(function (e) {
+            this._dispatcher.addEventListener(EventType.ADD_DATA_FROM_FILE, goog.bind(function (e) {
                 this._createNew();
-                var shapes = e.detail.shapes;
-                for (var i = 0; i < shapes.length; i++){
-                    this._model.addShape(shapes[i]);
-                    this._view.drawShape(shapes[i]);
-                }
-
+                this._addShapesFromFile(e.detail);
             }, this), false);
         },
 
-        /**
+         /**
          * @private
          */
-        _addShapeMoveAndResizeListen: function () {
+        _ShapeMoveAndResizeListen: function () {
             var canvas = this._view.getBody();
             canvas.onmousedown = goog.bind(function (e) {
                 var key = this._view.getShapeKeyByClickPos(e);
@@ -171,8 +199,8 @@ goog.scope(function() {
         /**
          * @private
          */
-        _addRedrawShapeListen: function () {
-            this._dispatcher.addEventListener(TestApplication.EventType.UPDATE_SHAPE, goog.bind(function (e) {
+        _RedrawShapeListen: function () {
+            this._dispatcher.addEventListener(EventType.UPDATE_SHAPE, goog.bind(function (e) {
                 this._view.redrawShape(e.detail);
             }, this), false);
         },
@@ -180,18 +208,9 @@ goog.scope(function() {
         /**
          * @private
          */
-        _addClearScreenListen: function () {
-            this._dispatcher.addEventListener(TestApplication.EventType.CLEAR_SCREEN, goog.bind(function (e) {
-                this._view.clearScreen();
-            }, this), false);
-        },
-
-        /**
-         * @private
-         */
-        _addDeleteClickListen: function () {
+        _DeleteClickListen: function () {
             this._dispatcher.addEventListener("keypress", goog.bind(function (e) {
-                if (e.keyCode == CONST.KEY_DELETE_CODE  && this._view.isShapeSelected()) {
+                if (e.keyCode == Constants.KEY_DELETE_CODE  && this._view.isShapeSelected()) {
                     var shape = this._model.getShapeByKey(this._view.getIndexOfSelectedShape());
                     this._removeShape(shape);
                 }
@@ -201,8 +220,8 @@ goog.scope(function() {
         /**
          * @private
          */
-        _addRemoveShapeListen: function () {
-            this._dispatcher.addEventListener(TestApplication.EventType.REMOVE_SHAPE, goog.bind(function (e) {
+        _RemoveShapeListen: function () {
+            this._dispatcher.addEventListener(EventType.REMOVE_SHAPE, goog.bind(function (e) {
                 this._view.removeShape(e.detail);
             }, this), false);
         },
@@ -244,6 +263,18 @@ goog.scope(function() {
         _moveShape: function (shape, pos) {
             var command = new TestApplication.commands.MoveShapeCommand(shape, pos);
             this._history.addCommand(command);
+        },
+
+        /**
+         * @private
+         * @param detail
+         */
+        _addShapesFromFile: function(detail){
+            var shapes = detail.data;
+            for (var i = 0; i < shapes.length; i++){
+                this._model.addShape(shapes[i]);
+                this._view.drawShape(shapes[i]);
+            }
         },
 
         /**

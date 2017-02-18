@@ -23,10 +23,8 @@ goog.scope(function() {
         constructor: function () {
             /** @private {Array<TestApplication.view.ShapeView>}*/
             this._shapes = [];
-
             /** @private {TestApplication.view.Frame} */
             this._frame = new TestApplication.view.Frame();
-
             /** @private {TestApplication.view.ShapeView} */
             this._selectedShape = null;
 
@@ -60,8 +58,10 @@ goog.scope(function() {
         isShapeSelected: function () {
             return this._selectedShape != null;
         },
-
-        drawFrame: function () {
+/**
+* @private
+*/
+        _drawFrame: function () {
             this._body.appendChild(this._frame.getObject());
         },
 
@@ -197,7 +197,7 @@ goog.scope(function() {
             var shape = this._getShapeByKey(key);
             if (shape != null) {
                 this._frame.setShape(shape);
-                this.drawFrame();
+                this._drawFrame();
                 this._selectedShape = shape;
             }
         },

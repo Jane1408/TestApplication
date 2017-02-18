@@ -38,7 +38,7 @@ goog.scope(function() {
          */
         unExecute: function () {
             this._model.addShape(this._shape);
-            var event = new CustomEvent(TestApplication.EventType.SHAPE_ADDED, {
+            var event = new CustomEvent(TestApplication.EventType.DRAW_SHAPE, {
                 "detail": {
                     "shape": this._shape
                 }
