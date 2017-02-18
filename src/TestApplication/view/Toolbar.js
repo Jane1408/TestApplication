@@ -6,11 +6,11 @@ goog.require("TestApplication.ScreenElement");
 goog.require("TestApplication.EventType");
 goog.require("goog.dom");
 
-goog.scope(function(){
+goog.scope(function () {
     const ShapeType = TestApplication.ShapeType;
     const ScreenElement = TestApplication.ScreenElement;
     const EventType = TestApplication.EventType;
-    
+
     /**
      * @constructor
      */
@@ -21,20 +21,19 @@ goog.scope(function(){
             this._createToolbar();
             this._createButtons();
             this._appendButtons();
-            
+
         },
-        
+
         /**
          * @private
          */
-        _createToolbar: function()
-        {
+        _createToolbar: function () {
             /** @private {Element} */
             this._toolbar = goog.dom.createElement(goog.dom.TagName.DIV);
             this._toolbar.setAttribute("class", ScreenElement.TOOLBAR);
             document.body.appendChild(this._toolbar);
         },
-        
+
         /**
          * @private
          */
@@ -48,14 +47,12 @@ goog.scope(function(){
             this._buttons.push(new TestApplication.view.Button(ScreenElement.NEW, EventType.CREATE_NEW));
             this._buttons.push(new TestApplication.view.Button(ScreenElement.SAVE, EventType.SAVE_TO_FILE));
         },
-        
+
         /**
          * @private
          */
-        _appendButtons: function()
-        {
-            for (var i = 0; i < this._buttons.length; i++)
-            {
+        _appendButtons: function () {
+            for (var i = 0; i < this._buttons.length; i++) {
                 this._toolbar.appendChild(this._buttons[i].getObject());
             }
         },

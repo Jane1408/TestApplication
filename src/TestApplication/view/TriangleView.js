@@ -3,7 +3,7 @@ goog.provide("TestApplication.view.TriangleView");
 goog.require("TestApplication.view.ShapeView");
 goog.require("goog.style");
 
-goog.scope(function() {
+goog.scope(function () {
     /**
      * @constructor
      * @param {TestApplication.model.ShapeModel} model
@@ -59,8 +59,8 @@ goog.scope(function() {
 
             goog.style.setStyle(this._interior, "border-left", size.width / 2 + "px solid transparent");
             goog.style.setStyle(this._interior, "border-right", size.width / 2 + "px solid transparent");
-            goog.style.setStyle(this._interior, "border-bottom", size.height  + "px solid #ffff00");
-            goog.style.setPosition(this._interior, new goog.math.Coordinate(-size.width / 2 , 2));
+            goog.style.setStyle(this._interior, "border-bottom", size.height + "px solid #ffff00");
+            goog.style.setPosition(this._interior, new goog.math.Coordinate(-size.width / 2, 2));
         },
 
         /**

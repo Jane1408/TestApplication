@@ -11,7 +11,7 @@ goog.require("TestApplication.commands.ResizeShapeCommand");
 goog.require("TestApplication.commands.RemoveShapeCommand");
 goog.require("TestApplication.Constants");
 
-goog.scope(function() {
+goog.scope(function () {
     const Constants = TestApplication.Constants;
     const EventType = TestApplication.EventType;
     /**
@@ -49,7 +49,7 @@ goog.scope(function() {
         /**
          * @private
          */
-        _addShapeListen: function(){
+        _addShapeListen: function () {
             this._dispatcher.addEventListener(EventType.ADD_SHAPE, goog.bind(function (e) {
                 this._addShape(e.detail.id);
             }, this), false);
@@ -58,7 +58,7 @@ goog.scope(function() {
         /**
          * @private
          */
-        _undoListen: function(){
+        _undoListen: function () {
             this._dispatcher.addEventListener(EventType.UNDO, goog.bind(function () {
                 this._undo();
             }, this), false);
@@ -67,7 +67,7 @@ goog.scope(function() {
         /**
          * @private
          */
-        _redoListen: function(){
+        _redoListen: function () {
             this._dispatcher.addEventListener(EventType.REDO, goog.bind(function () {
                 this._redo();
             }, this), false);
@@ -76,7 +76,7 @@ goog.scope(function() {
         /**
          * @private
          */
-        _createNewListen: function(){
+        _createNewListen: function () {
             this._dispatcher.addEventListener(EventType.CREATE_NEW, goog.bind(function () {
                 this._createNew();
             }, this), false);
@@ -85,7 +85,7 @@ goog.scope(function() {
         /**
          * @private
          */
-        _openFileListen: function(){
+        _openFileListen: function () {
             this._dispatcher.addEventListener(EventType.OPEN_FILE, goog.bind(function () {
                 this._fileWorker.clickFileReader();
             }, this), false);
@@ -94,7 +94,7 @@ goog.scope(function() {
         /**
          * @private
          */
-        _saveToFileListen: function(){
+        _saveToFileListen: function () {
             this._dispatcher.addEventListener(EventType.SAVE_TO_FILE, goog.bind(function () {
                 this._fileWorker.saveToFile(this._model.getData());
             }, this), false);
@@ -121,7 +121,7 @@ goog.scope(function() {
             }, this), false);
         },
 
-         /**
+        /**
          * @private
          */
         _ShapeMoveAndResizeListen: function () {
@@ -138,7 +138,7 @@ goog.scope(function() {
                     this._view.deselect();
                 }
             }, this);
-            canvas.ondragstart = function() {
+            canvas.ondragstart = function () {
                 return false;
             };
         },
@@ -191,7 +191,7 @@ goog.scope(function() {
                     goog.style.setStyle(document.documentElement, "cursor", "default");
                 }, this);
             }
-            else{
+            else {
                 goog.style.setStyle(document.documentElement, "cursor", "default");
             }
         },
@@ -210,7 +210,7 @@ goog.scope(function() {
          */
         _DeleteClickListen: function () {
             this._dispatcher.addEventListener("keypress", goog.bind(function (e) {
-                if (e.keyCode == Constants.KEY_DELETE_CODE  && this._view.isShapeSelected()) {
+                if (e.keyCode == Constants.KEY_DELETE_CODE && this._view.isShapeSelected()) {
                     var shape = this._model.getShapeByKey(this._view.getIndexOfSelectedShape());
                     this._removeShape(shape);
                 }
@@ -269,9 +269,9 @@ goog.scope(function() {
          * @private
          * @param detail
          */
-        _addShapesFromFile: function(detail){
+        _addShapesFromFile: function (detail) {
             var shapes = detail.data;
-            for (var i = 0; i < shapes.length; i++){
+            for (var i = 0; i < shapes.length; i++) {
                 this._model.addShape(shapes[i]);
                 this._view.drawShape(shapes[i]);
             }
@@ -285,7 +285,7 @@ goog.scope(function() {
             this._view.clearScreen();
             this._history.clearHistory();
         },
-        
+
         /**
          * @private
          */

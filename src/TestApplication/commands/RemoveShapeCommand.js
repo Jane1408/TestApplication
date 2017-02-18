@@ -2,7 +2,7 @@ goog.provide("TestApplication.commands.RemoveShapeCommand");
 
 goog.require("TestApplication.commands.ICommand");
 
-goog.scope(function() {
+goog.scope(function () {
     /**
      * @constructor
      * @param {TestApplication.model.Model} model

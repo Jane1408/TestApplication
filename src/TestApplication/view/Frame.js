@@ -3,8 +3,8 @@ goog.provide("TestApplication.view.Frame");
 goog.require("TestApplication.view.ResizePoint");
 goog.require("TestApplication.Constants");
 
-goog.scope(function() {
-    const CONST = TestApplication.Constants;
+goog.scope(function () {
+    const Constants = TestApplication.Constants;
     /**
      * @constructor
      */
@@ -87,12 +87,12 @@ goog.scope(function() {
          * @private
          */
         _calculateCorrectSize: function (newSize, pos) {
-            newSize.width = (newSize.width <= CONST.MIN_SHAPE_WIDTH) ? CONST.MIN_SHAPE_WIDTH : newSize.width;
-            newSize.width = (newSize.width >= CONST.MAX_SHAPE_WIDTH) ? CONST.MAX_SHAPE_WIDTH : newSize.width;
-            newSize.width = (newSize.width >= CONST.CANVAS_WIDTH - pos.x) ? CONST.CANVAS_WIDTH - pos.x : newSize.width;
-            newSize.height = (newSize.height <= CONST.MIN_SHAPE_HEIGHT) ? CONST.MIN_SHAPE_HEIGHT : newSize.height;
-            newSize.height = (newSize.height >= CONST.MAX_SHAPE_HEIGHT) ? CONST.MAX_SHAPE_HEIGHT : newSize.height;
-            newSize.height = (newSize.height >= CONST.CANVAS_HEIGHT - pos.y) ? CONST.CANVAS_HEIGHT - pos.y : newSize.height;
+            newSize.width = (newSize.width <= Constants.MIN_SHAPE_WIDTH) ? Constants.MIN_SHAPE_WIDTH : newSize.width;
+            newSize.width = (newSize.width >= Constants.MAX_SHAPE_WIDTH) ? Constants.MAX_SHAPE_WIDTH : newSize.width;
+            newSize.width = (newSize.width >= Constants.CANVAS_WIDTH - pos.x) ? Constants.CANVAS_WIDTH - pos.x : newSize.width;
+            newSize.height = (newSize.height <= Constants.MIN_SHAPE_HEIGHT) ? Constants.MIN_SHAPE_HEIGHT : newSize.height;
+            newSize.height = (newSize.height >= Constants.MAX_SHAPE_HEIGHT) ? Constants.MAX_SHAPE_HEIGHT : newSize.height;
+            newSize.height = (newSize.height >= Constants.CANVAS_HEIGHT - pos.y) ? Constants.CANVAS_HEIGHT - pos.y : newSize.height;
             return newSize;
         },
 
@@ -104,8 +104,8 @@ goog.scope(function() {
         _transferMouseCoordinateToCanvasArea: function (pos) {
             pos.x = (pos.x < 0) ? 0 : pos.x;
             pos.y = (pos.y < 0) ? 0 : pos.y;
-            pos.x = (pos.x >= CONST.CANVAS_WIDTH) ? CONST.CANVAS_WIDTH : pos.x;
-            pos.y = (pos.y >= CONST.CANVAS_HEIGHT) ? CONST.CANVAS_HEIGHT : pos.y;
+            pos.x = (pos.x >= Constants.CANVAS_WIDTH) ? Constants.CANVAS_WIDTH : pos.x;
+            pos.y = (pos.y >= Constants.CANVAS_HEIGHT) ? Constants.CANVAS_HEIGHT : pos.y;
             return pos;
         },
 
@@ -115,10 +115,10 @@ goog.scope(function() {
          * @private
          */
         _calculateCorrectShapePositionForMoving: function (pos) {
-            pos.x = (Math.abs(pos.x + this._size.width) > CONST.CANVAS_WIDTH)
-                ? CONST.CANVAS_WIDTH - this._size.width : pos.x;
-            pos.y = (Math.abs(pos.y  + this._size.height) >= CONST.CANVAS_HEIGHT)
-                ? CONST.CANVAS_HEIGHT - this._size.height : pos.y;
+            pos.x = (Math.abs(pos.x + this._size.width) > Constants.CANVAS_WIDTH)
+                ? Constants.CANVAS_WIDTH - this._size.width : pos.x;
+            pos.y = (Math.abs(pos.y + this._size.height) >= Constants.CANVAS_HEIGHT)
+                ? Constants.CANVAS_HEIGHT - this._size.height : pos.y;
             return pos;
         },
 
@@ -128,14 +128,14 @@ goog.scope(function() {
          * @private
          */
         _calculateCorrectShapePositionForResizing: function (pos) {
-            pos.x = (Math.abs(pos.x - (this._position.x + this._size.width)) >= CONST.MAX_SHAPE_WIDTH)
-                ? this._position.x + this._size.width - CONST.MAX_SHAPE_WIDTH : pos.x;
-            pos.x = (Math.abs(pos.x - (this._position.x + this._size.width)) <= CONST.MIN_SHAPE_WIDTH)
-                ? this._position.x + this._size.width - CONST.MIN_SHAPE_WIDTH : pos.x;
-            pos.y = (Math.abs(pos.y - (this._position.y + this._size.height)) >= CONST.MAX_SHAPE_HEIGHT)
-                ? this._position.y + this._size.height - CONST.MAX_SHAPE_HEIGHT : pos.y;
-            pos.y = (Math.abs(pos.y - (this._position.y + this._size.height)) <= CONST.MIN_SHAPE_HEIGHT)
-                ? this._position.y + this._size.height - CONST.MIN_SHAPE_HEIGHT : pos.y;
+            pos.x = (Math.abs(pos.x - (this._position.x + this._size.width)) >= Constants.MAX_SHAPE_WIDTH)
+                ? this._position.x + this._size.width - Constants.MAX_SHAPE_WIDTH : pos.x;
+            pos.x = (Math.abs(pos.x - (this._position.x + this._size.width)) <= Constants.MIN_SHAPE_WIDTH)
+                ? this._position.x + this._size.width - Constants.MIN_SHAPE_WIDTH : pos.x;
+            pos.y = (Math.abs(pos.y - (this._position.y + this._size.height)) >= Constants.MAX_SHAPE_HEIGHT)
+                ? this._position.y + this._size.height - Constants.MAX_SHAPE_HEIGHT : pos.y;
+            pos.y = (Math.abs(pos.y - (this._position.y + this._size.height)) <= Constants.MIN_SHAPE_HEIGHT)
+                ? this._position.y + this._size.height - Constants.MIN_SHAPE_HEIGHT : pos.y;
             return pos;
         },
 
@@ -144,9 +144,9 @@ goog.scope(function() {
          * @returns {number}
          * @private
          */
-        _calculateCorrectXPosWithShapeMinWidth: function(xPos){
+        _calculateCorrectXPosWithShapeMinWidth: function (xPos) {
             xPos = (xPos > (this._position.x + this._size.width))
-                ? this._position.x + this._size.width - CONST.MIN_SHAPE_WIDTH : xPos;
+                ? this._position.x + this._size.width - Constants.MIN_SHAPE_WIDTH : xPos;
             return xPos;
         },
 
@@ -155,9 +155,9 @@ goog.scope(function() {
          * @returns {number}
          * @private
          */
-        _calculateCorrectYPosWithShapeMinHeight: function(yPos){
+        _calculateCorrectYPosWithShapeMinHeight: function (yPos) {
             yPos = (yPos > (this._position.y + this._size.height))
-                ? this._position.y + this._size.height - CONST.MIN_SHAPE_HEIGHT : yPos;
+                ? this._position.y + this._size.height - Constants.MIN_SHAPE_HEIGHT : yPos;
             return yPos;
         },
 
@@ -169,7 +169,8 @@ goog.scope(function() {
             var newPos = new goog.math.Coordinate(0, 0);
             pos = this._transferMouseCoordinateToCanvasArea(pos);
             switch (this._activePointId) {
-                case 0:{
+                case 0:
+                {
                     newPos = pos;
                     newPos.x = this._calculateCorrectXPosWithShapeMinWidth(newPos.x);
                     newPos.y = this._calculateCorrectYPosWithShapeMinHeight(newPos.y);
@@ -177,18 +178,21 @@ goog.scope(function() {
                         this._position.y + this._size.height - pos.y);
                     break;
                 }
-                case 1:{
+                case 1:
+                {
                     newPos = new goog.math.Coordinate(this._position.x, pos.y);
                     newPos.y = this._calculateCorrectYPosWithShapeMinHeight(newPos.y);
                     newSize = new goog.math.Size(pos.x - this._position.x, this._position.y + this._size.height - pos.y);
                     break;
                 }
-                case 2:{
+                case 2:
+                {
                     newPos = this._position;
                     newSize = new goog.math.Size(pos.x - this._position.x, pos.y - this._position.y);
                     break;
                 }
-                case 3:{
+                case 3:
+                {
                     newPos = new goog.math.Coordinate(pos.x, this._position.y);
                     newPos.x = this._calculateCorrectXPosWithShapeMinWidth(newPos.x);
                     newSize = new goog.math.Size(this._position.x + this._size.width - pos.x, pos.y - this._position.y);
@@ -240,14 +244,14 @@ goog.scope(function() {
          * @private
          */
         _setPositionOfPoints: function (size) {
-            goog.style.setPosition(this._points[0].getObject(), new goog.math.Coordinate(-CONST.RESIZE_POINT_RADIUS,
-                -CONST.RESIZE_POINT_RADIUS));
-            goog.style.setPosition(this._points[1].getObject(), new goog.math.Coordinate(size.width - CONST.RESIZE_POINT_RADIUS,
-                -CONST.RESIZE_POINT_RADIUS));
-            goog.style.setPosition(this._points[2].getObject(), new goog.math.Coordinate(size.width - CONST.RESIZE_POINT_RADIUS,
-                size.height - CONST.RESIZE_POINT_RADIUS));
-            goog.style.setPosition(this._points[3].getObject(), new goog.math.Coordinate(-CONST.RESIZE_POINT_RADIUS,
-                size.height - CONST.RESIZE_POINT_RADIUS));
+            goog.style.setPosition(this._points[0].getObject(), new goog.math.Coordinate(-Constants.RESIZE_POINT_RADIUS,
+                -Constants.RESIZE_POINT_RADIUS));
+            goog.style.setPosition(this._points[1].getObject(), new goog.math.Coordinate(size.width - Constants.RESIZE_POINT_RADIUS,
+                -Constants.RESIZE_POINT_RADIUS));
+            goog.style.setPosition(this._points[2].getObject(), new goog.math.Coordinate(size.width - Constants.RESIZE_POINT_RADIUS,
+                size.height - Constants.RESIZE_POINT_RADIUS));
+            goog.style.setPosition(this._points[3].getObject(), new goog.math.Coordinate(-Constants.RESIZE_POINT_RADIUS,
+                size.height - Constants.RESIZE_POINT_RADIUS));
 
         },
 

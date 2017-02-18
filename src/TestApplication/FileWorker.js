@@ -66,7 +66,7 @@ goog.scope(function () {
             downloadLink.innerHTML = "Download File";
 
             downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
-            downloadLink.onclick = function(event) {
+            downloadLink.onclick = function (event) {
                 document.body.removeChild(event.target);
             };
             downloadLink.style.display = "none";

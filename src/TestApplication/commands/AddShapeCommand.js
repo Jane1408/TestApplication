@@ -3,7 +3,7 @@ goog.provide("TestApplication.commands.AddShapeCommand");
 goog.require("TestApplication.commands.ICommand");
 goog.require("TestApplication.model.ShapeModel");
 
-goog.scope(function() {
+goog.scope(function () {
     /**
      * @constructor
      * @param {TestApplication.model.Model} model

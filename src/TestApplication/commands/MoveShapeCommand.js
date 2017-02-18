@@ -3,7 +3,7 @@ goog.provide("TestApplication.commands.MoveShapeCommand");
 goog.require("TestApplication.commands.ICommand");
 goog.require("goog.math");
 
-goog.scope(function() {
+goog.scope(function () {
     /**
      * @constructor
      * @param {TestApplication.model.ShapeModel} shape

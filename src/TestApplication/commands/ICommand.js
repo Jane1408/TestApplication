@@ -1,6 +1,6 @@
 goog.provide("TestApplication.commands.ICommand");
 
-goog.scope(function() {
+goog.scope(function () {
     /**
      * @constructor
      */

@@ -1,6 +1,6 @@
 goog.provide("TestApplication.model.Model");
 
-goog.scope(function() {
+goog.scope(function () {
     /**
      * @constructor
      */
@@ -14,10 +14,10 @@ goog.scope(function() {
          * @param {TestApplication.model.ShapeModel} shape
          */
         addShape: function (shape) {
-            if (shape.getLayerId() != -1){
+            if (shape.getLayerId() != -1) {
                 goog.array.insertAt(this._data, shape, shape.getLayerId());
             }
-            else{
+            else {
                 goog.array.insert(this._data, shape);
             }
         },
@@ -26,7 +26,7 @@ goog.scope(function() {
          * @param {TestApplication.model.ShapeModel} shape
          */
         removeShape: function (shape) {
-           for (var i = 0; i != this._data.length; ++i) {
+            for (var i = 0; i != this._data.length; ++i) {
                 if (shape == this._data[i]) {
                     shape.setLayerId(i);
                     this._data.splice(i--, 1);
@@ -51,11 +51,11 @@ goog.scope(function() {
         /**
          * @return {Array<TestApplication.model.ShapeModel>}
          */
-        getData: function(){
+        getData: function () {
             return this._data;
         },
-        
-        removeData: function(){
+
+        removeData: function () {
             goog.array.clear(this._data);
         },
 

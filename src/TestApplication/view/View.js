@@ -12,10 +12,10 @@ goog.require("TestApplication.Constants");
 goog.require("TestApplication.ScreenElement");
 
 
-goog.scope(function() {
-    const SCREEN_ELEMENT = TestApplication.ScreenElement;
-    const SHAPE_TYPE = TestApplication.ShapeType;
-    const CONST = TestApplication.Constants;
+goog.scope(function () {
+    const ScreenElement = TestApplication.ScreenElement;
+    const ShapeType = TestApplication.ShapeType;
+    const Constants = TestApplication.Constants;
     /**
      * @constructor
      */
@@ -37,8 +37,8 @@ goog.scope(function() {
         _createBody: function () {
             /** @private {Element} */
             this._body = goog.dom.createElement(goog.dom.TagName.DIV);
-            this._body.setAttribute("class", SCREEN_ELEMENT.CANVAS);
-            goog.style.setSize(this._body, new goog.math.Size(CONST.CANVAS_WIDTH, CONST.CANVAS_HEIGHT));
+            this._body.setAttribute("class", ScreenElement.CANVAS);
+            goog.style.setSize(this._body, new goog.math.Size(Constants.CANVAS_WIDTH, Constants.CANVAS_HEIGHT));
             document.body.appendChild(this._body);
         },
 
@@ -58,9 +58,9 @@ goog.scope(function() {
         isShapeSelected: function () {
             return this._selectedShape != null;
         },
-/**
-* @private
-*/
+        /**
+         * @private
+         */
         _drawFrame: function () {
             this._body.appendChild(this._frame.getObject());
         },
@@ -87,19 +87,19 @@ goog.scope(function() {
         drawShape: function (model) {
             var type = model.getType();
             switch (type) {
-                case SHAPE_TYPE.ELLIPSE:
+                case ShapeType.ELLIPSE:
                 {
                     var ellipse = new TestApplication.view.EllipseView(model);
                     this._addShapeToArray(ellipse);
                     break;
                 }
-                case SHAPE_TYPE.TRIANGLE:
+                case ShapeType.TRIANGLE:
                 {
                     var triangle = new TestApplication.view.TriangleView(model);
                     this._addShapeToArray(triangle);
                     break;
                 }
-                case SHAPE_TYPE.RECTANGLE:
+                case ShapeType.RECTANGLE:
                 {
                     var rectangle = new TestApplication.view.RectangleView(model);
                     this._addShapeToArray(rectangle);
@@ -208,7 +208,7 @@ goog.scope(function() {
          */
         getShapeKeyByClickPos: function (detail) {
             var clickPos = this._transferMouseCoordinateToCanvasArea(detail.pageX, detail.pageY);
-            if (clickPos.y <= CONST.CANVAS_HEIGHT && clickPos.x <= CONST.CANVAS_WIDTH) {
+            if (clickPos.y <= Constants.CANVAS_HEIGHT && clickPos.x <= Constants.CANVAS_WIDTH) {
                 for (var i = this._shapes.length - 1; i >= 0; i--) {
                     if (this._shapes[i].hitTest(clickPos)) {
                         return this._shapes[i].getKey();
@@ -247,7 +247,7 @@ goog.scope(function() {
          * @private
          */
         _transferMouseCoordinateToCanvasArea: function (xPos, yPos) {
-            return (new goog.math.Coordinate(xPos, yPos - CONST.TOOLBAR_HEIGHT));
+            return (new goog.math.Coordinate(xPos, yPos - Constants.TOOLBAR_HEIGHT));
         },
     });
 });

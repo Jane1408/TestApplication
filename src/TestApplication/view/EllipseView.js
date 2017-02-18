@@ -3,37 +3,33 @@ goog.provide("TestApplication.view.EllipseView");
 goog.require("TestApplication.view.ShapeView");
 goog.require("goog.style");
 
-goog.scope(function()
-{
+goog.scope(function () {
     /**
      * @constructor
      * @param {TestApplication.model.ShapeModel} model
      * @extends {TestApplication.view.ShapeView}
      */
     TestApplication.view.EllipseView = goog.defineClass(TestApplication.view.ShapeView, {
-        constructor:function(model)
-        {
+        constructor: function (model) {
             goog.base(this, model);
             this._shape = goog.dom.createElement(goog.dom.TagName.DIV);
             this._shape.setAttribute("class", "shape");
-            goog.style.setStyle(this._shape, "border-radius",  this.getSize().width / 2 + "em/" + this.getSize().height / 2 +"em");
-            goog.style.setPosition(this._shape,  this.getPosition());
+            goog.style.setStyle(this._shape, "border-radius", this.getSize().width / 2 + "em/" + this.getSize().height / 2 + "em");
+            goog.style.setPosition(this._shape, this.getPosition());
             goog.style.setSize(this._shape, this.getSize());
         },
 
         /**
          * @inheritDoc
          */
-        getObject: function()
-        {
+        getObject: function () {
             return this._shape;
         },
 
         /**
          * @inheritDoc
          */
-        redraw: function()
-        {
+        redraw: function () {
             goog.style.setPosition(this._shape, this.getPosition());
             this.resize(this.getSize());
         },
@@ -41,24 +37,24 @@ goog.scope(function()
         /**
          * @inheritDoc
          */
-        move: function(pos){
+        move: function (pos) {
             goog.style.setPosition(this._shape, pos);
         },
 
         /**
          * @inheritDoc
          */
-        resize: function(size){
+        resize: function (size) {
             goog.style.setSize(this._shape, size);
             var radius = (size.width > size.height) ? size.width / 2 : size.height / 2;
-            goog.style.setStyle(this._shape, "border-radius", size.width / 2 + "em/" + size.height / 2 +"em");
+            goog.style.setStyle(this._shape, "border-radius", size.width / 2 + "em/" + size.height / 2 + "em");
 
         },
 
         /**
          * @inheritDoc
          */
-        hitTest: function(clickPos) {
+        hitTest: function (clickPos) {
             var shapePos = this.getPosition();
             var radius = new goog.math.Coordinate(this.getSize().width / 2, this.getSize().height / 2);
             var origin = new goog.math.Coordinate(shapePos.x + radius.x, shapePos.y + radius.y);

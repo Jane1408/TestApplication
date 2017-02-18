@@ -1,6 +1,6 @@
 goog.provide("TestApplication.History");
 
-goog.scope(function() {
+goog.scope(function () {
     /**
      * @constructor
      */
@@ -28,8 +28,8 @@ goog.scope(function() {
         /**
          * @public
          */
-        clearHistory: function(){
-            this._commands = [];
+        clearHistory: function () {
+            goog.array.clear(this._commands);
             this._currentCommand = 0;
         },
 

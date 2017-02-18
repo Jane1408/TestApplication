@@ -2,7 +2,7 @@ goog.provide("TestApplication.view.Button");
 
 goog.require("goog.dom");
 
-goog.scope(function() {
+goog.scope(function () {
     /**
      * @constructor
      * @param {string} id

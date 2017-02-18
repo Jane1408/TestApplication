@@ -2,7 +2,7 @@ goog.provide("TestApplication.commands.ResizeShapeCommand");
 
 goog.require("TestApplication.commands.ICommand");
 
-goog.scope(function() {
+goog.scope(function () {
     /**
      * @constructor
      * @param {TestApplication.model.ShapeModel} shape

@@ -2,9 +2,8 @@ goog.provide("TestApplication.view.ResizePoint");
 
 goog.require("TestApplication.Constants");
 
-goog.scope(function()
-{
-    const CONST = TestApplication.Constants;
+goog.scope(function () {
+    const Constants = TestApplication.Constants;
     /**
      * @constructor
      * @param {string} className
@@ -22,8 +21,8 @@ goog.scope(function()
         },
 
         /**
-        * @private
-        */
+         * @private
+         */
         _createPoint: function (className) {
             /** @type {Element}*/
             this._point = goog.dom.createElement(goog.dom.TagName.DIV);
@@ -33,19 +32,18 @@ goog.scope(function()
         },
 
         /**
-        * @return {Element}
-        */
-        getObject: function()
-        {
+         * @return {Element}
+         */
+        getObject: function () {
             return this._point;
         },
 
         /**
-        * @return {boolean}
-        */
-        _hitTest: function(clickPos, pointPos) {
-            return ((pointPos.x <= clickPos.x && clickPos.x <=  pointPos.x + CONST.RESIZE_POINT_RADIUS * 2) &&
-            (pointPos.y <= clickPos.y && clickPos.y <=  pointPos.y + CONST.RESIZE_POINT_RADIUS * 2));
+         * @return {boolean}
+         */
+        _hitTest: function (clickPos, pointPos) {
+            return ((pointPos.x <= clickPos.x && clickPos.x <= pointPos.x + Constants.RESIZE_POINT_RADIUS * 2) &&
+            (pointPos.y <= clickPos.y && clickPos.y <= pointPos.y + Constants.RESIZE_POINT_RADIUS * 2));
 
         },
     })

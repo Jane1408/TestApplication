@@ -2,7 +2,7 @@ goog.provide("TestApplication.model.ShapeModel");
 
 goog.require("TestApplication.Constants");
 
-goog.scope(function() {
+goog.scope(function () {
     const CONST = TestApplication.Constants;
     /**
      * @constructor
