@@ -5,7 +5,7 @@ goog.require("TestApplication.commands.ICommand");
 goog.scope(function () {
     /**
      * @constructor
-     * @param {TestApplication.model.Model} model
+     * @param {TestApplication.model.ShapeCollection} model
      * @param {TestApplication.model.ShapeModel} shape
      * @extends {TestApplication.commands.ICommand}
      */
@@ -13,7 +13,7 @@ goog.scope(function () {
         constructor: function (model, shape) {
             this._dispatcher = document;
 
-            /**@private {TestApplication.model.Model}*/
+            /**@private {TestApplication.model.ShapeCollection}*/
             this._model = model;
 
             /**@private {TestApplication.model.ShapeModel}*/

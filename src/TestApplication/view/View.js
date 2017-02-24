@@ -11,7 +11,6 @@ goog.require("TestApplication.view.Frame");
 goog.require("TestApplication.Constants");
 goog.require("TestApplication.ScreenElement");
 
-
 goog.scope(function () {
     const ScreenElement = TestApplication.ScreenElement;
     const ShapeType = TestApplication.ShapeType;
@@ -28,26 +27,15 @@ goog.scope(function () {
             /** @private {TestApplication.view.ShapeView} */
             this._selectedShape = null;
 
-            this._createBody();
-        },
-
-        /**
-         * @private
-         */
-        _createBody: function () {
-            /** @private {Element} */
-            this._body = goog.dom.createElement(goog.dom.TagName.DIV);
-            this._body.setAttribute("class", ScreenElement.CANVAS);
-            goog.style.setSize(this._body, new goog.math.Size(Constants.CANVAS_WIDTH, Constants.CANVAS_HEIGHT));
-            document.body.appendChild(this._body);
+            this._createCanvas();
         },
 
         /**
          * @return number
          */
-        getIndexOfSelectedShape: function () {
+        getIdOfSelectedShape: function () {
             if (this._selectedShape != null) {
-                return this._selectedShape.getKey();
+                return this._selectedShape.getId();
             }
             return 0;
         },
@@ -58,16 +46,10 @@ goog.scope(function () {
         isShapeSelected: function () {
             return this._selectedShape != null;
         },
-        /**
-         * @private
-         */
-        _drawFrame: function () {
-            this._body.appendChild(this._frame.getObject());
-        },
 
         deselect: function () {
             if (this._frame.isActive()) {
-                this._body.removeChild(this._frame.getObject());
+                this._canvas.removeChild(this._frame.getElement());
                 this._frame.deactivate();
                 this._selectedShape = null;
             }
@@ -76,7 +58,7 @@ goog.scope(function () {
         clearScreen: function () {
             this.deselect();
             for (var i = 0; i != this._shapes.length; ++i) {
-                this._body.removeChild(this._shapes[i].getObject());
+                this._canvas.removeChild(this._shapes[i].getElement());
             }
             this._shapes.splice(0, this._shapes.length);
         },
@@ -111,30 +93,10 @@ goog.scope(function () {
         },
 
         /**
-         * @param {TestApplication.view.ShapeView} shape
-         * @private
-         */
-        _addShapeToArray: function (shape) {
-            if (shape.getLayerId() != -1) {
-                for (var i = shape.getLayerId(); i < this._shapes.length; i++) {
-                    this._body.removeChild(this._shapes[i].getObject());
-                }
-                goog.array.insertAt(this._shapes, shape, shape.getLayerId());
-                for (var j = shape.getLayerId(); j < this._shapes.length; j++) {
-                    this._body.appendChild(this._shapes[j].getObject());
-                }
-            }
-            else {
-                goog.array.insert(this._shapes, shape);
-                this._body.appendChild(shape.getObject());
-            }
-        },
-
-        /**
          * @param detail
          */
         redrawShape: function (detail) {
-            var shape = this._getShapeByKey(detail.key);
+            var shape = this._getShapeViewById(detail.id);
             if (shape != null) shape.redraw();
         },
 
@@ -144,8 +106,8 @@ goog.scope(function () {
         removeShape: function (detail) {
             var shape = detail.shape;
             for (var i = 0; i != this._shapes.length; ++i) {
-                if (shape.getKey() == this._shapes[i].getKey()) {
-                    this._body.removeChild(this._shapes[i].getObject());
+                if (shape.getId() == this._shapes[i].getId()) {
+                    this._canvas.removeChild(this._shapes[i].getElement());
                     this._shapes.splice(i--, 1);
                     break;
                 }
@@ -171,30 +133,16 @@ goog.scope(function () {
         /**
          * @return {Element}
          */
-        getBody: function () {
-            return this._body;
+        getCanvas: function () {
+            return this._canvas;
         },
 
         /**
-         * @param {number} key
-         * @return {?TestApplication.view.ShapeView}
-         * @private
+         * @param {number} id
          */
-        _getShapeByKey: function (key) {
-            for (var i = 0; i != this._shapes.length; ++i) {
-                if (key == this._shapes[i].getKey()) {
-                    return this._shapes[i];
-                }
-            }
-            return null;
-        },
-
-        /**
-         * @param {number} key
-         */
-        selectShape: function (key) {
+        selectShape: function (id) {
             this.deselect();
-            var shape = this._getShapeByKey(key);
+            var shape = this._getShapeViewById(id);
             if (shape != null) {
                 this._frame.setShape(shape);
                 this._drawFrame();
@@ -206,17 +154,18 @@ goog.scope(function () {
          * @param detail
          * @return {number}
          */
-        getShapeKeyByClickPos: function (detail) {
+        getShapeIdByClickPos: function (detail) {
             var clickPos = this._transferMouseCoordinateToCanvasArea(detail.pageX, detail.pageY);
             if (clickPos.y <= Constants.CANVAS_HEIGHT && clickPos.x <= Constants.CANVAS_WIDTH) {
                 for (var i = this._shapes.length - 1; i >= 0; i--) {
                     if (this._shapes[i].hitTest(clickPos)) {
-                        return this._shapes[i].getKey();
+                        return this._shapes[i].getId();
                     }
                 }
             }
             return 0;
         },
+
         /**
          * @param detail
          * @returns {boolean}
@@ -241,6 +190,58 @@ goog.scope(function () {
         },
 
         /**
+         * @private
+         */
+        _createCanvas: function () {
+            /** @private {Element} */
+            this._canvas = goog.dom.createElement(goog.dom.TagName.DIV);
+            this._canvas.setAttribute("class", ScreenElement.CANVAS);
+            goog.style.setSize(this._canvas, new goog.math.Size(Constants.CANVAS_WIDTH, Constants.CANVAS_HEIGHT));
+            document.body.appendChild(this._canvas);
+        },
+
+        /**
+         * @private
+         */
+        _drawFrame: function () {
+            this._canvas.appendChild(this._frame.getElement());
+        },
+
+        /**
+         * @param {TestApplication.view.ShapeView} shape
+         * @private
+         */
+        _addShapeToArray: function (shape) {
+            if (shape.getLevel() != -1) {
+                for (var i = shape.getLevel(); i < this._shapes.length; i++) {
+                    this._canvas.removeChild(this._shapes[i].getElement());
+                }
+                goog.array.insertAt(this._shapes, shape, shape.getLevel());
+                for (var j = shape.getLevel(); j < this._shapes.length; j++) {
+                    this._canvas.appendChild(this._shapes[j].getElement());
+                }
+            }
+            else {
+                goog.array.insert(this._shapes, shape);
+                this._canvas.appendChild(shape.getElement());
+            }
+        },
+
+        /**
+         * @param {number} id
+         * @return {?TestApplication.view.ShapeView}
+         * @private
+         */
+        _getShapeViewById: function (id) {
+            for (var i = 0; i != this._shapes.length; ++i) {
+                if (id == this._shapes[i].getId()) {
+                    return this._shapes[i];
+                }
+            }
+            return null;
+        },
+
+        /**
          * @param {number} xPos
          * @param {number} yPos
          * @returns {goog.math.Coordinate}
@@ -248,6 +249,6 @@ goog.scope(function () {
          */
         _transferMouseCoordinateToCanvasArea: function (xPos, yPos) {
             return (new goog.math.Coordinate(xPos, yPos - Constants.TOOLBAR_HEIGHT));
-        },
+        }
     });
 });

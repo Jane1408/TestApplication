@@ -22,7 +22,7 @@ goog.scope(function () {
         /**
          * @inheritDoc
          */
-        getObject: function () {
+        getElement: function () {
             return this._shape;
         },
 
@@ -61,6 +61,6 @@ goog.scope(function () {
             var pointLocalPos = new goog.math.Coordinate(clickPos.x - origin.x, clickPos.y - origin.y);
 
             return (((Math.pow(pointLocalPos.x, 2) / Math.pow(radius.x, 2)) + (Math.pow(pointLocalPos.y, 2) / Math.pow(radius.y, 2))) <= 1);
-        },
+        }
     })
 });

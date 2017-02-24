@@ -12,44 +12,8 @@ goog.scope(function () {
             this._addChangeListen();
         },
 
-        /**
-         * @private
-         */
-        _addChangeListen: function () {
-            this._fileReader.addEventListener("change", goog.bind(function (e) {
-                this._openFile(e);
-            }, this), false);
-        },
-
-        /**
-         * @private
-         */
-        _createFileReader: function () {
-            /** @private {Element}*/
-            this._fileReader = document.createElement(goog.dom.TagName.INPUT);
-            this._fileReader.type = "file";
-            goog.style.setStyle(this._fileReader, "display", "none");
-            document.body.appendChild(this._fileReader);
-        },
-
         clickFileReader: function () {
             this._fileReader.click();
-        },
-
-        /**
-         * @private
-         */
-        _openFile: function (event) {
-            var files = event.target.files;
-            for (var i = 0, file; file = files[i]; i++) {
-                var reader = new FileReader();
-                reader.onload = goog.bind(function (event) {
-                    var data = event.target.result;
-                    this._readJSON(data);
-                }, this);
-                reader.readAsText(file);
-            }
-            event.target.value = "";
         },
 
         /**
@@ -72,6 +36,43 @@ goog.scope(function () {
             downloadLink.style.display = "none";
             document.body.appendChild(downloadLink);
             downloadLink.click();
+        },
+
+        /**
+         * @private
+         */
+        _addChangeListen: function () {
+            this._fileReader.addEventListener("change", goog.bind(function (e) {
+                this._openFile(e);
+            }, this), false);
+        },
+
+        /**
+         * @private
+         */
+        _createFileReader: function () {
+            /** @private {Element}*/
+            this._fileReader = document.createElement(goog.dom.TagName.INPUT);
+            this._fileReader.type = "file";
+            this._fileReader.accept = "application/json";
+            goog.style.setStyle(this._fileReader, "display", "none");
+            document.body.appendChild(this._fileReader);
+        },
+
+        /**
+         * @private
+         */
+        _openFile: function (event) {
+            var files = event.target.files;
+            for (var i = 0, file; file = files[i]; i++) {
+                var reader = new FileReader();
+                reader.onload = goog.bind(function (event) {
+                    var data = event.target.result;
+                    this._readJSON(data);
+                }, this);
+                reader.readAsText(file);
+            }
+            event.target.value = "";
         },
 
         /**
@@ -108,11 +109,10 @@ goog.scope(function () {
 
             var event = new CustomEvent(TestApplication.EventType.ADD_DATA_FROM_FILE, {
                 "detail": {
-                    "data": shapeModels,
+                    "data": shapeModels
                 }
             });
             this._dispatcher.dispatchEvent(event);
-        },
-
+        }
     })
 });

@@ -6,5 +6,5 @@ goog.provide("TestApplication.ShapeType");
 TestApplication.ShapeType = {
     TRIANGLE: "triangle",
     ELLIPSE: "ellipse",
-    RECTANGLE: "rectangle",
+    RECTANGLE: "rectangle"
 };

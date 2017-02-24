@@ -24,7 +24,7 @@ goog.scope(function () {
          * @virtual
          * @returns {Element}
          */
-        getObject: function () {
+        getElement: function () {
         },
 
         /**
@@ -50,8 +50,8 @@ goog.scope(function () {
         /**
          * @returns {number}
          */
-        getKey: function () {
-            return this._model.getKey();
+        getId: function () {
+            return this._model.getId();
         },
 
         /**
@@ -71,9 +71,8 @@ goog.scope(function () {
         /**
          * @returns {number}
          */
-        getLayerId: function () {
-            return this._model.getLayerId();
-        },
-
+        getLevel: function () {
+            return this._model.getLevel();
+        }
     })
 });

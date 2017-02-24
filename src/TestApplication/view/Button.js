@@ -21,12 +21,20 @@ goog.scope(function () {
         },
 
         /**
+         * @return {Element}
+         */
+        getObject: function () {
+            return this._button;
+        },
+
+        /**
          * @private
          */
         _createButton: function () {
             /** @private {Element} */
             this._button = goog.dom.createElement(goog.dom.TagName.BUTTON);
-            this._button.setAttribute("class", this._id);
+            this._button.setAttribute("class", "button");
+            this._button.classList.add(this._id);
             this._button.type = "submit";
         },
 
@@ -40,13 +48,6 @@ goog.scope(function () {
                 }
             });
             this._dispatcher.dispatchEvent(event);
-        },
-
-        /**
-         * @return {Element}
-         */
-        getObject: function () {
-            return this._button;
-        },
+        }
     });
 });

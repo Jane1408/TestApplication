@@ -10,5 +10,5 @@ TestApplication.ScreenElement = {
     CANVAS: "canvas",
     OPEN: "open",
     SAVE: "save",
-    NEW: "new",
+    NEW: "new"
 };

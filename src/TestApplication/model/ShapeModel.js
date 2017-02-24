@@ -3,7 +3,7 @@ goog.provide("TestApplication.model.ShapeModel");
 goog.require("TestApplication.Constants");
 
 goog.scope(function () {
-    const CONST = TestApplication.Constants;
+    const Constants = TestApplication.Constants;
     /**
      * @constructor
      * @param {string} type
@@ -13,14 +13,13 @@ goog.scope(function () {
             /** @private {string}*/
             this._type = type;
             /** @private {goog.math.Coordinate}*/
-            this._position = new goog.math.Coordinate(CONST.SHAPE_START_POSITION_X, CONST.SHAPE_START_POSITION_Y);
+            this._position = new goog.math.Coordinate(Constants.SHAPE_START_POSITION_X, Constants.SHAPE_START_POSITION_Y);
             /** @private {goog.math.Size}*/
-            this._size = new goog.math.Size(CONST.SHAPE_START_WIDTH, CONST.SHAPE_START_HEIGHT);
+            this._size = new goog.math.Size(Constants.SHAPE_START_WIDTH, Constants.SHAPE_START_HEIGHT);
             /** @private {number}*/
-            this._key = goog.getUid(this);
+            this._id = goog.getUid(this);
             /** @private {number}*/
-            this._layerId = -1;
-
+            this._level = -1;
         },
 
         /**
@@ -38,10 +37,10 @@ goog.scope(function () {
         },
 
         /**
-         * @param {number} id
+         * @param {number} level
          */
-        setLayerId: function (id) {
-            this._layerId = id;
+        setLevel: function (level) {
+            this._level = level;
         },
 
         /**
@@ -68,15 +67,14 @@ goog.scope(function () {
         /**
          * @returns {number}
          */
-        getKey: function () {
-            return this._key;
+        getId: function () {
+            return this._id;
         },
         /**
          * @returns {number}
          */
-        getLayerId: function () {
-            return this._layerId;
+        getLevel: function () {
+            return this._level;
         }
-
     });
 });

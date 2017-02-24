@@ -1,68 +1,74 @@
 .canvas {
   position: absolute;
-  top: 55px;
+  top: 30px;
   left: 0;
   background-color: transparent;
+  border: solid 1px #949494;
 }
 
-.triangle{
-  background: url("../../res/triangle.png") no-repeat;
-  position: absolute;
-  width: 55px;
-  height: 55px;
-  top: 0;
-  left:0;
-}
-
-.ellipse{
-  background: url("../../res/ellipse.png") no-repeat;
-  position: absolute;
-  width: 55px;
-  height: 55px;
-  top: 0;
-  left: 55px;
-}
-
-.rectangle{
-  background: url("../../res/rectangle.png") no-repeat;
-  position: absolute;
-  width: 55px;
-  height: 55px;
-  top: 0;
-  left: 110px;
-}
-
-.undo{
-  background: url("../../res/undo.png") no-repeat;
-  position: absolute;
-  width: 55px;
-  height: 55px;
-  top: 0;
-  right: 55px;
-}
-
-.redo{
-  background: url("../../res/redo.png") no-repeat;
-  position: absolute;
-  width: 55px;
-  height: 55px;
-  top: 0;
-  right: 0;
-}
-
-.toolbar{
+.toolbar {
   position: absolute;
   width: 640px;
-  height: 55px;
+  height: 30px;
   top: 0;
   left: 0;
-  background-color: #e3e0d6;
+  background-color: #c1eeeb;
+  border: solid 1px #949494;
+}
+
+.toolbar .button{
+  position: absolute;
+  width: 30px;
+  height: 30px;
+}
+
+.toolbar {
+  .triangle{
+    background: url("../res/triangle.png") no-repeat;
+    left:0;
+  }
+
+  .ellipse{
+    background: url("../res/ellipse.png") no-repeat;
+    left: 30px;
+  }
+
+  .rectangle{
+    background: url("../res/rectangle.png") no-repeat;
+    left: 60px;
+  }
+
+  .undo{
+    background: url("../res/undo.png") no-repeat;
+    right: 30px;
+  }
+
+  .redo{
+    background: url("../res/redo.png") no-repeat;
+    right: 0;
+  }
+
+  .open {
+    background: url("../res/open.png") no-repeat;
+    right: 195px;
+  }
+
+  .save {
+    background: url("../res/save.png") no-repeat;
+    right: 165px;
+  }
+
+  .new {
+    background: url("../res/new.png") no-repeat;
+    right: 225px;
+  }
+
 }
 
 .shape {
   position: absolute;
   background-color: #ffff00;
-  border: solid 2px #ffaa00;
+  border: solid 1px #ffaa00;
 }
 
 .frame {
@@ -97,43 +103,16 @@
   position: absolute;
   width: 0;
   height: 0;
-  border-left: 50px solid transparent;
-  border-right: 50px solid transparent;
+  border-left: 30px solid transparent;
+  border-right: 30px solid transparent;
   border-bottom: 100px solid #ffaa00;
 }
 
-.triangle-interior {
+.triangle-shape .interior {
   position: absolute;
   width: 0;
   height: 0;
   border-left: 52px solid transparent;
   border-right: 52px solid transparent;
   border-bottom: 102px solid #ffff00;
-}
-
-.open {
-  background: url("../../res/open.png") no-repeat;
-  position: absolute;
-  width: 55px;
-  height: 55px;
-  top: 0;
-  right: 220px;
-}
-
-.save {
-  background: url("../../res/save.png") no-repeat;
-  position: absolute;
-  width: 55px;
-  height: 55px;
-  top: 0;
-  right: 165px;
-}
-
-.new {
-  background: url("../../res/new.png") no-repeat;
-  position: absolute;
-  width: 55px;
-  height: 55px;
-  top: 0;
-  right: 275px;
 }

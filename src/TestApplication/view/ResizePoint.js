@@ -21,6 +21,13 @@ goog.scope(function () {
         },
 
         /**
+         * @return {Element}
+         */
+        getObject: function () {
+            return this._point;
+        },
+
+        /**
          * @private
          */
         _createPoint: function (className) {
@@ -32,19 +39,11 @@ goog.scope(function () {
         },
 
         /**
-         * @return {Element}
-         */
-        getObject: function () {
-            return this._point;
-        },
-
-        /**
          * @return {boolean}
          */
         _hitTest: function (clickPos, pointPos) {
-            return ((pointPos.x <= clickPos.x && clickPos.x <= pointPos.x + Constants.RESIZE_POINT_RADIUS * 2) &&
-            (pointPos.y <= clickPos.y && clickPos.y <= pointPos.y + Constants.RESIZE_POINT_RADIUS * 2));
-
-        },
+            return ((pointPos.x <= clickPos.x && clickPos.x <= pointPos.x + Constants.RESIZE_POINT_WIDTH) &&
+            (pointPos.y <= clickPos.y && clickPos.y <= pointPos.y + Constants.RESIZE_POINT_HEIGHT));
+        }
     })
 });

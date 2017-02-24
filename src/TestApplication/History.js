@@ -38,7 +38,8 @@ goog.scope(function () {
          */
         undo: function () {
             if (this._currentCommand > 0 && (this._commands.length != 0)) {
-                this._commands[--this._currentCommand].unExecute();
+                var i = --this._currentCommand;
+                this._commands[i].unExecute();
             }
         },
 

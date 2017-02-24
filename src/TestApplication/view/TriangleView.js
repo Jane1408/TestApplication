@@ -19,18 +19,10 @@ goog.scope(function () {
             this._createInteriorShape();
         },
 
-        _createInteriorShape: function () {
-            /** @private {Element}*/
-            this._interior = goog.dom.createElement(goog.dom.TagName.DIV);
-            this._interior.setAttribute("class", "triangle-interior");
-            this._shape.appendChild(this._interior);
-            this.resize(this.getSize());
-        },
-
         /**
          * @inheritDoc
          */
-        getObject: function () {
+        getElement: function () {
             return this._shape;
         },
 
@@ -74,6 +66,17 @@ goog.scope(function () {
             var thirdCondition = clickPos.y < bottomRight.y;
             return (firstCondition && secondCondition && thirdCondition);
         },
+
+        /**
+         * @private
+         */
+        _createInteriorShape: function () {
+            /** @private {Element}*/
+            this._interior = goog.dom.createElement(goog.dom.TagName.DIV);
+            this._interior.setAttribute("class", "interior");
+            this._shape.appendChild(this._interior);
+            this.resize(this.getSize());
+        }
     });
 });
 

@@ -6,7 +6,7 @@ goog.require("TestApplication.model.ShapeModel");
 goog.scope(function () {
     /**
      * @constructor
-     * @param {TestApplication.model.Model} model
+     * @param {TestApplication.model.ShapeCollection} model
      * @param {string} type
      * @extends {TestApplication.commands.ICommand}
      */
@@ -14,7 +14,7 @@ goog.scope(function () {
         constructor: function (model, type) {
             this._dispatcher = document;
 
-            /** @private {TestApplication.model.Model}*/
+            /** @private {TestApplication.model.ShapeCollection}*/
             this._model = model;
             /** @private {TestApplication.model.ShapeModel} */
             this._newShape = new TestApplication.model.ShapeModel(type);

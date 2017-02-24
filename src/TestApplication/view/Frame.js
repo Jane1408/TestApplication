@@ -33,6 +33,123 @@ goog.scope(function () {
         },
 
         /**
+         * @param {TestApplication.view.ShapeView} shape
+         */
+        setShape: function (shape) {
+            this._shape = shape;
+            this._setPosition(shape.getPosition());
+            this._setSize(shape.getSize());
+            this._isActive = true;
+        },
+
+        /**
+         * @param {goog.math.Coordinate} pos
+         */
+        move: function (pos) {
+            pos = this._transferMouseCoordinateToCanvasArea(pos);
+            pos = this._calculateCorrectShapePositionForMoving(pos);
+            this._setPosition(pos);
+            this._shape.move(this._position);
+        },
+
+        /**
+         * @param {goog.math.Coordinate} pos
+         */
+        resize: function (pos) {
+            var newSize = new goog.math.Size(0, 0);
+            var newPos = new goog.math.Coordinate(0, 0);
+            pos = this._transferMouseCoordinateToCanvasArea(pos);
+            switch (this._activePointId) {
+                case 0:
+                {
+                    newPos = pos;
+                    newPos.x = this._calculateCorrectXPosWithShapeMinWidth(newPos.x);
+                    newPos.y = this._calculateCorrectYPosWithShapeMinHeight(newPos.y);
+                    newSize = new goog.math.Size(this._position.x + this._size.width - pos.x,
+                        this._position.y + this._size.height - pos.y);
+                    break;
+                }
+                case 1:
+                {
+                    newPos = new goog.math.Coordinate(this._position.x, pos.y);
+                    newPos.y = this._calculateCorrectYPosWithShapeMinHeight(newPos.y);
+                    newSize = new goog.math.Size(pos.x - this._position.x, this._position.y + this._size.height - pos.y);
+                    break;
+                }
+                case 2:
+                {
+                    newPos = this._position;
+                    newSize = new goog.math.Size(pos.x - this._position.x, pos.y - this._position.y);
+                    break;
+                }
+                case 3:
+                {
+                    newPos = new goog.math.Coordinate(pos.x, this._position.y);
+                    newPos.x = this._calculateCorrectXPosWithShapeMinWidth(newPos.x);
+                    newSize = new goog.math.Size(this._position.x + this._size.width - pos.x, pos.y - this._position.y);
+                    break;
+                }
+                default:
+                    return;
+            }
+            this._position = this._calculateCorrectShapePositionForResizing(newPos);
+            this._size = this._calculateCorrectSize(newSize, this._position);
+            this.move(this._position);
+            this._setSize(this._size);
+            this._shape.resize(this._size);
+        },
+
+        /**
+         * @returns {boolean}
+         */
+        isActive: function () {
+            return this._isActive;
+        },
+
+        deactivate: function () {
+            this._isActive = false;
+        },
+
+        /**
+         * @return {Element}
+         */
+        getElement: function () {
+            return this._frame;
+        },
+        
+        /**
+         * @param {goog.math.Coordinate} pos
+         * @return {boolean}
+         */
+        checkPoints: function (pos) {
+            var clickPos = new goog.math.Coordinate(pos.x - this.getPosition().x, pos.y - this.getPosition().y);
+            for (var i = 0; i < this._points.length; i++) {
+                var pointPos = goog.style.getPosition(this._points[i].getObject());
+                if (this._points[i]._hitTest(clickPos, pointPos)) {
+                    var style = (i == 0 || i == 2) ? "nw-resize" : "ne-resize";
+                    goog.style.setStyle(document.documentElement, "cursor", style);
+                    this._activePointId = i;
+                    return true;
+                }
+            }
+            return false;
+        },
+
+        /**
+         * @return {goog.math.Size}
+         */
+        getSize: function () {
+            return this._size;
+        },
+
+        /**
+         * @return {goog.math.Coordinate}
+         */
+        getPosition: function () {
+            return this._position;
+        },
+
+        /**
          * @private
          */
         _createFrame: function () {
@@ -58,26 +175,6 @@ goog.scope(function () {
             this._size = size;
             goog.style.setSize(this._frame, this._size);
             this._setPositionOfPoints(this._size);
-        },
-
-        /**
-         * @param {TestApplication.view.ShapeView} shape
-         */
-        setShape: function (shape) {
-            this._shape = shape;
-            this._setPosition(shape.getPosition());
-            this._setSize(shape.getSize());
-            this._isActive = true;
-        },
-
-        /**
-         * @param {goog.math.Coordinate} pos
-         */
-        move: function (pos) {
-            pos = this._transferMouseCoordinateToCanvasArea(pos);
-            pos = this._calculateCorrectShapePositionForMoving(pos);
-            this._setPosition(pos);
-            this._shape.move(this._position);
         },
 
         /**
@@ -162,71 +259,6 @@ goog.scope(function () {
         },
 
         /**
-         * @param {goog.math.Coordinate} pos
-         */
-        resize: function (pos) {
-            var newSize = new goog.math.Size(0, 0);
-            var newPos = new goog.math.Coordinate(0, 0);
-            pos = this._transferMouseCoordinateToCanvasArea(pos);
-            switch (this._activePointId) {
-                case 0:
-                {
-                    newPos = pos;
-                    newPos.x = this._calculateCorrectXPosWithShapeMinWidth(newPos.x);
-                    newPos.y = this._calculateCorrectYPosWithShapeMinHeight(newPos.y);
-                    newSize = new goog.math.Size(this._position.x + this._size.width - pos.x,
-                        this._position.y + this._size.height - pos.y);
-                    break;
-                }
-                case 1:
-                {
-                    newPos = new goog.math.Coordinate(this._position.x, pos.y);
-                    newPos.y = this._calculateCorrectYPosWithShapeMinHeight(newPos.y);
-                    newSize = new goog.math.Size(pos.x - this._position.x, this._position.y + this._size.height - pos.y);
-                    break;
-                }
-                case 2:
-                {
-                    newPos = this._position;
-                    newSize = new goog.math.Size(pos.x - this._position.x, pos.y - this._position.y);
-                    break;
-                }
-                case 3:
-                {
-                    newPos = new goog.math.Coordinate(pos.x, this._position.y);
-                    newPos.x = this._calculateCorrectXPosWithShapeMinWidth(newPos.x);
-                    newSize = new goog.math.Size(this._position.x + this._size.width - pos.x, pos.y - this._position.y);
-                    break;
-                }
-                default:
-                    return;
-            }
-            this._position = this._calculateCorrectShapePositionForResizing(newPos);
-            this._size = this._calculateCorrectSize(newSize, this._position);
-            this.move(this._position);
-            this._setSize(this._size);
-            this._shape.resize(this._size);
-        },
-
-        /**
-         * @returns {boolean}
-         */
-        isActive: function () {
-            return this._isActive;
-        },
-
-        deactivate: function () {
-            this._isActive = false;
-        },
-
-        /**
-         * @return {Element}
-         */
-        getObject: function () {
-            return this._frame;
-        },
-
-        /**
          * @private
          */
         _createResizePoints: function () {
@@ -253,38 +285,6 @@ goog.scope(function () {
             goog.style.setPosition(this._points[3].getObject(), new goog.math.Coordinate(-Constants.RESIZE_POINT_RADIUS,
                 size.height - Constants.RESIZE_POINT_RADIUS));
 
-        },
-
-        /**
-         * @param {goog.math.Coordinate} pos
-         * @return {boolean}
-         */
-        checkPoints: function (pos) {
-            var clickPos = new goog.math.Coordinate(pos.x - this.getPosition().x, pos.y - this.getPosition().y);
-            for (var i = 0; i < this._points.length; i++) {
-                var pointPos = goog.style.getPosition(this._points[i].getObject());
-                if (this._points[i]._hitTest(clickPos, pointPos)) {
-                    var style = (i == 0 || i == 2) ? "nw-resize" : "ne-resize";
-                    goog.style.setStyle(document.documentElement, "cursor", style);
-                    this._activePointId = i;
-                    return true;
-                }
-            }
-            return false;
-        },
-
-        /**
-         * @return {goog.math.Size}
-         */
-        getSize: function () {
-            return this._size;
-        },
-
-        /**
-         * @return {goog.math.Coordinate}
-         */
-        getPosition: function () {
-            return this._position;
-        },
+        }
     })
 });

@@ -21,7 +21,7 @@ goog.scope(function () {
         /**
          * @inheritDoc
          */
-        getObject: function () {
+        getElement: function () {
             return this._shape;
         },
 
@@ -55,6 +55,6 @@ goog.scope(function () {
             var size = this.getSize();
             return ((shapePos.x <= clickPos.x && clickPos.x <= shapePos.x + size.width) &&
             (shapePos.y <= clickPos.y && clickPos.y <= shapePos.y + size.height));
-        },
+        }
     })
 });
