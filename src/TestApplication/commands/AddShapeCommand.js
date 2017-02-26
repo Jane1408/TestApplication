@@ -26,7 +26,7 @@ goog.scope(function () {
         execute: function () {
             this._model.addShape(this._newShape);
             var event = new CustomEvent(TestApplication.EventType.DRAW_SHAPE, {
-                "detail": {
+                "detail" : {
                     "shape": this._newShape
                 }
             });
@@ -39,7 +39,7 @@ goog.scope(function () {
         unExecute: function () {
             this._model.removeShape(this._newShape);
             var event = new CustomEvent(TestApplication.EventType.REMOVE_SHAPE, {
-                "detail": {
+                "detail" : {
                     "shape": this._newShape
                 }
             });

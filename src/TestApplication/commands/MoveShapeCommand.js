@@ -31,7 +31,7 @@ goog.scope(function () {
         execute: function () {
             this._shape.setPosition(this._newPos);
             var event = new CustomEvent(TestApplication.EventType.UPDATE_SHAPE, {
-                "detail": {
+                "detail" : {
                     "id": this._shape.getId()
                 }
             });
@@ -44,7 +44,7 @@ goog.scope(function () {
         unExecute: function () {
             this._shape.setPosition(this._oldPos);
             var event = new CustomEvent(TestApplication.EventType.UPDATE_SHAPE, {
-                "detail": {
+                "detail" : {
                     "id": this._shape.getId()
                 }
             });

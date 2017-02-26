@@ -97,19 +97,19 @@ goog.scope(function () {
          */
         _readJSON: function (json) {
             var data = JSON.parse(json);
-            var shapeModels = [];
+            var shapesModel = [];
             for (var i = 0; i < data.length; i++) {
                 var pos = new goog.math.Coordinate(data[i].position[0], data[i].position[1]);
                 var size = new goog.math.Size(data[i].size[0], data[i].size[1]);
                 var shape = new TestApplication.model.ShapeModel(data[i].type);
                 shape.setPosition(pos);
                 shape.setSize(size);
-                shapeModels.push(shape);
+                shapesModel.push(shape);
             }
 
             var event = new CustomEvent(TestApplication.EventType.ADD_DATA_FROM_FILE, {
-                "detail": {
-                    "data": shapeModels
+                "detail" : {
+                    "shapesModel": shapesModel
                 }
             });
             this._dispatcher.dispatchEvent(event);

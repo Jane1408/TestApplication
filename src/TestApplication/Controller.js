@@ -44,7 +44,8 @@ goog.scope(function () {
             this._openFileListener();
             this._saveToFileListener();
             this._shapeAddedListener();
-            this._shapeMoveAndResizeListener();
+            this._moveShapeListener();
+            this._resizeShapeListener();
             this._redrawShapeListener();
             this._deleteClickListener();
             this._removeShapeListener();
@@ -111,8 +112,8 @@ goog.scope(function () {
          */
         _shapeAddedListener: function () {
             this._dispatcher.addEventListener(EventType.DRAW_SHAPE, goog.bind(function (e) {
-                var model = e.detail.shape;
-                this._view.drawShape(model);
+                var model = e.shape;
+                this._view.drawShape(e.detail.shape);
             }, this), false);
         },
 
@@ -122,83 +123,28 @@ goog.scope(function () {
         _addShapesFromFileListener: function () {
             this._dispatcher.addEventListener(EventType.ADD_DATA_FROM_FILE, goog.bind(function (e) {
                 this._createNew();
-                this._addShapesFromFile(e.detail);
+                this._addShapesFromFile(e.detail.shapesModel);
             }, this), false);
         },
 
         /**
          * @private
          */
-        _shapeMoveAndResizeListener: function () {
-            var canvas = this._view.getCanvas();
-            canvas.onmousedown = goog.bind(function (e) {
-                var id = this._view.getShapeIdByClickPos(e);
-                if (this._view.isShapeSelected() && this._view.checkResizePointsOnclick(e)) {
-                    this._resizeListener();
-                }
-                else if (id) {
-                    this._moveListener(id, e);
-                }
-                else {
-                    this._view.deselect();
-                }
-            }, this);
-            canvas.ondragstart = function () {
-                return false;
-            };
-        },
-
-        /**
-         * @private
-         * @param {number} id
-         * @param  e
-         */
-        _moveListener: function (id, e) {
-            goog.style.setStyle(document.documentElement, "cursor", "move");
-            var shapeModel = this._model.getShapeById(id);
-            if (shapeModel != null) {
-                this._view.selectShape(id);
-                var shift = new goog.math.Coordinate(e.pageX - shapeModel.getPosition().x, e.pageY - shapeModel.getPosition().y);
-                var pos = new goog.math.Coordinate(e.pageX - shift.x, e.pageY - shift.y);
-                document.onmousemove = goog.bind(function (e) {
-                    pos = new goog.math.Coordinate(e.pageX - shift.x, e.pageY - shift.y);
-                    this._view.moveShapeView(pos);
-                }, this);
-
-                document.onmouseup = goog.bind(function () {
-                    document.onmousemove = null;
-                    document.onmouseup = null;
-                    if (pos.x != shapeModel.getPosition().x || pos.y != shapeModel.getPosition().y) {
-                        this._moveShape(shapeModel, pos);
-                    }
-                    goog.style.setStyle(document.documentElement, "cursor", "default");
-                }, this);
-            }
+        _moveShapeListener: function () {
+            this._dispatcher.addEventListener(EventType.MOVE_SHAPE, goog.bind(function (e) {
+                var shape = this._model.getShapeById(e.detail.id);
+                this._moveShape(shape, e.detail.pos);
+            }, this), false);
         },
 
         /**
          * @private
          */
-        _resizeListener: function () {
-            var id = this._view.getIdOfSelectedShape();
-            var shapeModel = this._model.getShapeById(id);
-            if (shapeModel != null) {
-                document.onmousemove = goog.bind(function (e) {
-                    this._view.resizeShapeView(e);
-                }, this);
-
-                document.onmouseup = goog.bind(function () {
-                    document.onmousemove = null;
-                    document.onmouseup = null;
-                    var pos = this._view.getFramePosition();
-                    var size = this._view.getFrameSize();
-                    this._resizeShape(shapeModel, pos, size);
-                    goog.style.setStyle(document.documentElement, "cursor", "default");
-                }, this);
-            }
-            else {
-                goog.style.setStyle(document.documentElement, "cursor", "default");
-            }
+        _resizeShapeListener: function () {
+            this._dispatcher.addEventListener(EventType.RESIZE_SHAPE, goog.bind(function (e) {
+                var shape = this._model.getShapeById(e.detail.id);
+                this._resizeShape(shape, e.detail.pos, e.detail.size);
+            }, this), false);
         },
 
         /**
@@ -206,7 +152,7 @@ goog.scope(function () {
          */
         _redrawShapeListener: function () {
             this._dispatcher.addEventListener(EventType.UPDATE_SHAPE, goog.bind(function (e) {
-                this._view.redrawShape(e.detail);
+                this._view.redrawShape(e.detail.id);
             }, this), false);
         },
 
@@ -227,7 +173,7 @@ goog.scope(function () {
          */
         _removeShapeListener: function () {
             this._dispatcher.addEventListener(EventType.REMOVE_SHAPE, goog.bind(function (e) {
-                this._view.removeShape(e.detail);
+                this._view.removeShape(e.detail.shape);
             }, this), false);
         },
 
@@ -272,10 +218,10 @@ goog.scope(function () {
 
         /**
          * @private
-         * @param detail
+         * @param shapesModel
          */
-        _addShapesFromFile: function (detail) {
-            var shapes = detail.data;
+        _addShapesFromFile: function (shapesModel) {
+            var shapes = shapesModel;
             for (var i = 0; i < shapes.length; i++) {
                 this._model.addShape(shapes[i]);
                 this._view.drawShape(shapes[i]);

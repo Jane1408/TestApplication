@@ -32,7 +32,7 @@ goog.scope(function () {
             this._shape.setPosition(this._newPos);
             this._shape.setSize(this._newSize);
             var event = new CustomEvent(TestApplication.EventType.UPDATE_SHAPE, {
-                "detail": {
+                "detail" : {
                     "id": this._shape.getId()
                 }
             });
@@ -46,7 +46,7 @@ goog.scope(function () {
             this._shape.setPosition(this._oldPos);
             this._shape.setSize(this._oldSize);
             var event = new CustomEvent(TestApplication.EventType.UPDATE_SHAPE, {
-                "detail": {
+                "detail" : {
                     "id": this._shape.getId()
                 }
             });
